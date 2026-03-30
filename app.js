@@ -153,10 +153,14 @@ function onViewChanged(viewId) {
         }, 500));
         
     } else if (viewId === 2) {
-        speak(currentLang === 'te' ? "మీ పేరు ఏమిటి?" : "आपका नाम क्या है?", () => {
-            // Automatically launch microphone when Voice finishes!
-            listenForName();
-        }, null, currentLang === 'te' ? "Mee peru ay-mi-ti?" : "Aapka naam kya hai?");
+        // Speak the name question — but do NOT auto-launch listen() inside the callback!
+        // Mobile browsers (Android/iOS) BLOCK microphone activation from inside TTS callbacks.
+        // The user must tap the mic button manually after hearing the question.
+        const nameQ = currentLang === 'te' ? "మీ పేరు ఏమిటి?" : "आपकా नाम क्या है?";
+        const nameQPhonetic = currentLang === 'te' ? "Mee peru ay-mi-ti?" : "Aapka naam kya hai?";
+        speak(nameQ, null, null, nameQPhonetic);
+        // Wire up the mic button so the user can tap when ready
+        bindMainMic(() => listenForName());
     } else if (viewId === 3) {
         const h2 = document.querySelector('#view-3 h2');
         if(h2) h2.innerText = currentLang === 'te' ? `నమస్కారం, ${appState.userName}!` : `नमस्ते, ${appState.userName}!`;
@@ -439,7 +443,6 @@ function confirmInput(promptData, onConfirm, onReject) {
 }
 
 function askAgeFlow() {
-    // Reset any active mic or TTS so tapping to retry is clean
     if (_activeRecognition) { try { _activeRecognition.abort(); } catch(e){} _activeRecognition=null; }
     _isListening = false;
     _speechId++;
@@ -447,11 +450,16 @@ function askAgeFlow() {
     let hl = document.getElementById("mic-headline");
     let st = document.getElementById("mic-status");
     if(hl) hl.innerText = currentLang === 'te' ? "మీ వయస్సు ఎంత?" : "आपकी उम्र क्या है?";
-    if(st) st.innerText = "Listening...";
+    if(st) st.innerText = currentLang === 'te' ? "↓ మైక్ నొక్కండి" : "↓ माइक दबाएं";
     
-    bindMainMic(() => askAgeFlow());
+    // FIX: speak first, wire mic button — do NOT call listen() inside TTS callback
+    speak(currentLang === 'te' ? "మీ వయస్సు ఎంత?" : "आपकी उम्र क्या है?",
+        null, null,
+        currentLang === 'te' ? "Mee vayasu entha?" : "Aapki umra kya hai?");
 
-    speak(currentLang === 'te' ? "మీ వయస్సు ఎంత?" : "आपकी उम्र क्या है?", () => {
+    bindMainMic(() => {
+        if (_isListening) return;
+        bindMainMic(() => askAgeFlow()); // rebind to retry
         listen((ageTranscript) => {
             if(ageTranscript) {
                 let numMatch = ageTranscript.match(/\d+/);
@@ -482,11 +490,10 @@ function askAgeFlow() {
                 if(st) st.innerText = currentLang === 'te' ? "వినపడలేదు. మైక్ టాప్ చేయండి." : "सुनाई नहीं दिया। माइक टैप करें।";
             }
         });
-    }, null, currentLang === 'te' ? "Mee vayasu entha?" : "Aapki umra kya hai?");
+    });
 }
 
 function askOccFlow() {
-    // Reset any active mic or TTS so tapping to retry is clean
     if (_activeRecognition) { try { _activeRecognition.abort(); } catch(e){} _activeRecognition=null; }
     _isListening = false;
     _speechId++;
@@ -494,38 +501,43 @@ function askOccFlow() {
     let hl = document.getElementById("mic-headline");
     let st = document.getElementById("mic-status");
     if(hl) hl.innerText = currentLang === 'te' ? "మీ వృత్తి ఏమిటి?" : "आप क्या काम करते हैं?";
-    if(st) st.innerText = "Listening...";
-    
-    bindMainMic(() => askOccFlow());
+    if(st) st.innerText = currentLang === 'te' ? "↓ మైక్ నొక్కండి" : "↓ माइक दबाएं";
 
-    speak(currentLang === 'te' ? "మీరు ఏమి పని చేస్తారు?" : "आप क्या काम करते हैं?", () => {
+    // FIX: speak first, wire mic button — do NOT call listen() inside TTS callback
+    speak(currentLang === 'te' ? "మీరు ఏమి పని చేస్తారు?" : "आप क्या काम करते हैं?",
+        null, null,
+        currentLang === 'te' ? "Meerem pani chestaru?" : "Aap kya kaam karte hain?");
+
+    bindMainMic(() => {
+        if (_isListening) return;
+        bindMainMic(() => askOccFlow());
         listen((occTranscript) => {
-             if(occTranscript) {
-                 let safeOcc = sanitizePhonetic(occTranscript);
-                 let pTe = safeOcc ? `Mee vrutti ${safeOcc} aa-na? Avunu leda kaadu cheppandi.` : `Idi sarainadena? Avunu leda kaadu ani cheppandi.`;
-                 let pHi = safeOcc ? `Kya aapka kaam ${safeOcc} hai? Haan ya na kahein.` : `Kya yeh sahi hai? Haan ya na kahein.`;
-                 
-                 confirmInput({
+            if(occTranscript) {
+                let safeOcc = sanitizePhonetic(occTranscript);
+                let pTe = safeOcc ? `Mee vrutti ${safeOcc} aa-na? Avunu leda kaadu cheppandi.` : `Idi sarainadena? Avunu leda kaadu ani cheppandi.`;
+                let pHi = safeOcc ? `Kya aapka kaam ${safeOcc} hai? Haan ya na kahein.` : `Kya yeh sahi hai? Haan ya na kahein.`;
+                
+                confirmInput({
                     title: currentLang === 'te' ? `మీ వృత్తి ${occTranscript} ఆనా?` : `क्या आपका काम ${occTranscript} है?`,
                     status: currentLang === 'te' ? "అవును లేదా కాదు చెప్పండి" : "हाँ या ना कहें",
                     speech: currentLang === 'te' ? `మీ వృత్తి ${occTranscript} ఆనా?` : `क्या आपका काम ${occTranscript} है?`,
                     phonetic: currentLang === 'te' ? pTe : pHi
-                 }, () => {
-                     appState.userOcc = occTranscript;
-                     localStorage.setItem('astitva_user', JSON.stringify({ 
-                         name: appState.userName, 
-                         age: appState.userAge, 
-                         occ: appState.userOcc 
-                     }));
-                     switchView(3);
-                 }, () => {
-                     speak(currentLang === 'te' ? "సరే, దయచేసి మీ వృత్తిని మళ్ళీ చెప్పండి." : "ठीक है, कृपया अपना काम फिर से बताएं।", () => askOccFlow());
-                 });
-             } else {
-                 if(st) st.innerText = currentLang === 'te' ? "వినపడలేదు. మైక్ టాప్ చేయండి." : "सुनाई नहीं दिया। माइक टैप करें।";
-             }
-         });
-    }, null, currentLang === 'te' ? "Meerem pani chestaru?" : "Aap kya kaam karte hain?");
+                }, () => {
+                    appState.userOcc = occTranscript;
+                    localStorage.setItem('astitva_user', JSON.stringify({ 
+                        name: appState.userName, 
+                        age: appState.userAge, 
+                        occ: appState.userOcc 
+                    }));
+                    switchView(3);
+                }, () => {
+                    speak(currentLang === 'te' ? "సరే, దయచేసి మీ వృత్తిని మళ్ళీ చెప్పండి." : "ठीक है, कृपया अपना काम फिर से बताएं।", () => askOccFlow());
+                });
+            } else {
+                if(st) st.innerText = currentLang === 'te' ? "వినపడలేదు. మైక్ టాప్ చేయండి." : "सुनाई नहीं दिया। माइक टैप करें।";
+            }
+        });
+    });
 }
 
 // ----------------------------------------------------------------------------
