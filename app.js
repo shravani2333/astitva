@@ -917,27 +917,65 @@ function speak(textNative, onEndCallback, forceLang = null, textPhonetic = null)
             if(textPhonetic) finalSpeakingText = textPhonetic;
         }
 
-        utter.text = finalSpeakingText;
+        // Android Chrome cuts off speech strictly at 15 seconds.
+        // FIX: Split long speech into sentence chunks and queue them sequentially.
+        const chunks = finalSpeakingText.match(/[^.!?।]+[.!?।]*/g) || [finalSpeakingText];
+        let currentChunkIndex = 0;
 
         // FIX 1B: Failsafe timeout — if browser drops the onend event, proceed anyway
+        // Increased multiplier significantly because Telugu/Hindi phonetics take longer
+        const totalTimeoutMs = (finalSpeakingText.length * 160) + 5000;
+        
+        let callbackFired = false;
+        const safeCallback = () => {
+            if (callbackFired || myId !== _speechId) return; // Prevent fired or cancelled speech
+            callbackFired = true;
+            if (_activeSpeakTimer) { clearTimeout(_activeSpeakTimer); _activeSpeakTimer = null; }
+            if (onEndCallback) onEndCallback();
+        };
+
         if (onEndCallback) {
-            let callbackFired = false;
-            const safeCallback = () => {
-                if (callbackFired || myId !== _speechId) return; // Prevent fired or cancelled speech
-                callbackFired = true;
-                if (_activeSpeakTimer) { clearTimeout(_activeSpeakTimer); _activeSpeakTimer = null; }
-                onEndCallback();
-            };
-            utter.onend = safeCallback;
-            utter.onerror = safeCallback;
-            // Timeout = ~100ms per character + 3s buffer
-            const timeoutMs = (finalSpeakingText.length * 100) + 3000;
-            _activeSpeakTimer = setTimeout(safeCallback, timeoutMs);
-        } else {
-            utter.onerror = () => {};
+            _activeSpeakTimer = setTimeout(safeCallback, totalTimeoutMs);
         }
 
-        window.speechSynthesis.speak(utter);
+        const speakNextChunk = () => {
+            if (myId !== _speechId || callbackFired) return;
+            
+            if (currentChunkIndex >= chunks.length) {
+                // Done speaking all chunks
+                if (onEndCallback) safeCallback();
+                return;
+            }
+
+            const chunkText = chunks[currentChunkIndex].trim();
+            if (!chunkText) {
+                currentChunkIndex++;
+                speakNextChunk();
+                return;
+            }
+
+            const utter = new SpeechSynthesisUtterance(chunkText);
+            utter.lang = targetLang;
+            utter.rate = 0.85;
+            if (finalVoice) utter.voice = finalVoice;
+
+            utter.onend = () => {
+                currentChunkIndex++;
+                speakNextChunk();
+            };
+            
+            utter.onerror = () => {
+                // Continue to next chunk even if one chunk errors
+                currentChunkIndex++;
+                speakNextChunk();
+            };
+
+            window.speechSynthesis.speak(utter);
+        };
+
+        // Start speaking the first chunk
+        speakNextChunk();
+        
     } catch(err) {
         if (onEndCallback) onEndCallback();
     }
