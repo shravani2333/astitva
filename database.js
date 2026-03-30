@@ -1,4 +1,5 @@
 const astitva_db = [
+  {
     "id": "T1",
     "name": "Mahalakshmi",
     "name_te": "మహాలక్ష్మి",
