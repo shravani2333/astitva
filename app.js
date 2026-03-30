@@ -340,7 +340,12 @@ function listen(callback) {
             _isListening = false;
             clearTimeout(watchdogTimer);
             _activeRecognition = null;
-            callback(""); 
+            if (lastInterim) {
+                console.log("[onerror] Promoting lastInterim:", lastInterim);
+                callback(lastInterim);
+            } else {
+                callback(""); 
+            }
         }
     };
 
@@ -350,7 +355,12 @@ function listen(callback) {
             _isListening = false;
             clearTimeout(watchdogTimer);
             _activeRecognition = null;
-            callback("");
+            if (lastInterim) {
+                console.log("[onend] Promoting lastInterim:", lastInterim);
+                callback(lastInterim);
+            } else {
+                callback("");
+            }
         }
     };
 
@@ -730,6 +740,7 @@ async function handleExpertChat(query) {
         // Send to Netlify Function
         const res = await fetch('/.netlify/functions/gemini', {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ messages: reqCtx, lang: currentLang })
         });
         

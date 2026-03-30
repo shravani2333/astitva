@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -7,8 +8,10 @@
     <link rel="icon" href="data:,">
     <!-- REMOVED FOR GITHUB: The Gemini API Key should only be configured via Netlify Environment Variables going forward -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+        rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -34,12 +37,14 @@
             font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
-        
+
         body {
-            background-color: #121520; /* Dark background matching the image */
+            background-color: #121520;
+            /* Dark background matching the image */
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
         ::-webkit-scrollbar {
             display: none;
         }
@@ -69,7 +74,8 @@
             right: -10%;
             width: 400px;
             height: 400px;
-            background: rgba(239, 68, 68, 0.4); /* Reddish */
+            background: rgba(239, 68, 68, 0.4);
+            /* Reddish */
         }
 
         .mesh-blob-2 {
@@ -77,7 +83,8 @@
             left: -10%;
             width: 500px;
             height: 500px;
-            background: rgba(251, 146, 60, 0.3); /* Orange */
+            background: rgba(251, 146, 60, 0.3);
+            /* Orange */
         }
 
         .mesh-blob-3 {
@@ -85,13 +92,22 @@
             left: 20%;
             width: 300px;
             height: 300px;
-            background: rgba(251, 146, 60, 0.15); /* Faint Center */
+            background: rgba(251, 146, 60, 0.15);
+            /* Faint Center */
         }
 
         @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(50px, -50px) scale(1.1); }
-            100% { transform: translate(-20px, 30px) scale(0.9); }
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(50px, -50px) scale(1.1);
+            }
+
+            100% {
+                transform: translate(-20px, 30px) scale(0.9);
+            }
         }
 
         /* Glassmorphism utility */
@@ -110,7 +126,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
         }
-        
+
         .glass-btn:hover {
             background: rgba(255, 255, 255, 0.15);
             border-color: rgba(255, 255, 255, 0.3);
@@ -128,7 +144,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .text-gradient-primary {
             background: linear-gradient(135deg, #fb923c 0%, #ef4444 100%);
             -webkit-background-clip: text;
@@ -137,7 +153,7 @@
         }
 
         .logo-text-gradient {
-            background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.3) 100%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.3) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -190,22 +206,29 @@
             display: none;
             animation: fadeIn 0.4s ease-out;
         }
-        
+
         .view-active {
             display: flex;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .nav-logo-transition {
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
     </style>
 </head>
+
 <body class="text-white relative min-h-screen flex flex-col items-center">
 
     <!-- Background -->
@@ -219,21 +242,22 @@
     <nav class="fixed top-0 w-full max-w-md mx-auto z-50 p-4 transition-all duration-300" id="main-nav">
         <div class="flex items-center justify-between">
             <!-- Navbar Logo (Shrinks/Moves) -->
-            <div class="flex flex-col items-center cursor-pointer nav-logo-transition origin-top-left" id="nav-logo" onclick="switchView(0)">
+            <div class="flex flex-col items-center cursor-pointer nav-logo-transition origin-top-left" id="nav-logo"
+                onclick="switchView(0)">
                 <svg viewBox="0 0 100 60" class="w-12 h-8 svg-glow">
                     <defs>
                         <linearGradient id="smSunGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-                            <stop offset="0%" style="stop-color:#ef4444"/>
-                            <stop offset="100%" style="stop-color:#fcd34d"/>
+                            <stop offset="0%" style="stop-color:#ef4444" />
+                            <stop offset="100%" style="stop-color:#fcd34d" />
                         </linearGradient>
                     </defs>
-                    <path d="M10,40 A40,40 0 0,1 90,40" fill="url(#smSunGrad)" opacity="0.9"/>
+                    <path d="M10,40 A40,40 0 0,1 90,40" fill="url(#smSunGrad)" opacity="0.9" />
                     <g stroke="#fcd34d" stroke-width="2" stroke-linecap="round">
-                        <line x1="50" y1="5" x2="50" y2="10"/>
-                        <line x1="30" y1="12" x2="35" y2="16"/>
-                        <line x1="70" y1="12" x2="65" y2="16"/>
-                        <line x1="15" y1="25" x2="20" y2="28"/>
-                        <line x1="85" y1="25" x2="80" y2="28"/>
+                        <line x1="50" y1="5" x2="50" y2="10" />
+                        <line x1="30" y1="12" x2="35" y2="16" />
+                        <line x1="70" y1="12" x2="65" y2="16" />
+                        <line x1="15" y1="25" x2="20" y2="28" />
+                        <line x1="85" y1="25" x2="80" y2="28" />
                     </g>
                     <!-- Small buildings -->
                     <g fill="#121520">
@@ -245,18 +269,22 @@
                         <rect x="70" y="30" width="4" height="10" />
                     </g>
                     <!-- Mic -->
-                    <rect x="46" y="42" width="8" height="12" rx="4" fill="url(#smSunGrad)"/>
-                    <line x1="50" y1="54" x2="50" y2="60" stroke="url(#smSunGrad)" stroke-width="2"/>
+                    <rect x="46" y="42" width="8" height="12" rx="4" fill="url(#smSunGrad)" />
+                    <line x1="50" y1="54" x2="50" y2="60" stroke="url(#smSunGrad)" stroke-width="2" />
                 </svg>
                 <div class="font-black text-[10px] tracking-widest mt-1">ASTITVA</div>
             </div>
 
-            <div class="flex flex-col gap-2 opacity-0 translate-x-4 transition-all duration-300 pointer-events-none" id="nav-actions">
+            <div class="flex flex-col gap-2 opacity-0 translate-x-4 transition-all duration-300 pointer-events-none"
+                id="nav-actions">
                 <!-- Nav Links Pill -->
                 <div class="glass-panel rounded-full px-4 py-2 flex gap-4 text-[10px] font-semibold text-gray-300">
-                    <button class="hover:text-white transition-colors" data-i18n="nav-home" onclick="if(localStorage.getItem('astitva_user')){switchView(3);}else{switchView(0);}">Home</button>
-                    <button class="hover:text-white transition-colors" data-i18n="nav-services" onclick="switchView(4)">Services</button>
-                    <button class="hover:text-white transition-colors" data-i18n="nav-about" onclick="switchView(6)">Ask Priya</button>
+                    <button class="hover:text-white transition-colors" data-i18n="nav-home"
+                        onclick="if(localStorage.getItem('astitva_user')){switchView(3);}else{switchView(0);}">Home</button>
+                    <button class="hover:text-white transition-colors" data-i18n="nav-services"
+                        onclick="switchView(4)">Services</button>
+                    <button class="hover:text-white transition-colors" data-i18n="nav-about" onclick="switchView(6)">Ask
+                        Priya</button>
                 </div>
 
                 <!-- Language Toggle Pill -->
@@ -273,25 +301,26 @@
         <!-- VIEW 0: SPLASH -->
         <div id="view-0" class="view-section flex-col items-center justify-center flex-1 px-4 mt-8">
             <!-- Main Glass Card -->
-            <div class="glass-panel w-full rounded-[2rem] p-8 flex flex-col items-center relative overflow-hidden mb-10">
+            <div
+                class="glass-panel w-full rounded-[2rem] p-8 flex flex-col items-center relative overflow-hidden mb-10">
                 <!-- Logo Graphic -->
                 <svg viewBox="0 0 200 120" class="w-full h-auto max-w-[240px] svg-glow mb-4 z-10">
                     <defs>
                         <linearGradient id="mainSun" x1="0%" y1="100%" x2="0%" y2="0%">
-                            <stop offset="0%" style="stop-color:#ef4444"/>
-                            <stop offset="50%" style="stop-color:#fb923c"/>
-                            <stop offset="100%" style="stop-color:#fcd34d"/>
+                            <stop offset="0%" style="stop-color:#ef4444" />
+                            <stop offset="50%" style="stop-color:#fb923c" />
+                            <stop offset="100%" style="stop-color:#fcd34d" />
                         </linearGradient>
                     </defs>
-                    <path d="M20,80 A80,80 0 0,1 180,80" fill="url(#mainSun)" opacity="0.95"/>
+                    <path d="M20,80 A80,80 0 0,1 180,80" fill="url(#mainSun)" opacity="0.95" />
                     <g stroke="#fcd34d" stroke-width="2.5" stroke-linecap="round">
-                        <line x1="100" y1="5" x2="100" y2="15"/>
-                        <line x1="60" y1="15" x2="65" y2="23"/>
-                        <line x1="140" y1="15" x2="135" y2="23"/>
-                        <line x1="30" y1="40" x2="38" y2="45"/>
-                        <line x1="170" y1="40" x2="162" y2="45"/>
-                        <line x1="10" y1="70" x2="20" y2="70"/>
-                        <line x1="190" y1="70" x2="180" y2="70"/>
+                        <line x1="100" y1="5" x2="100" y2="15" />
+                        <line x1="60" y1="15" x2="65" y2="23" />
+                        <line x1="140" y1="15" x2="135" y2="23" />
+                        <line x1="30" y1="40" x2="38" y2="45" />
+                        <line x1="170" y1="40" x2="162" y2="45" />
+                        <line x1="10" y1="70" x2="20" y2="70" />
+                        <line x1="190" y1="70" x2="180" y2="70" />
                     </g>
                     <!-- Skyline -->
                     <g fill="#121520" opacity="0.9">
@@ -306,21 +335,25 @@
                         <rect x="142" y="32" width="10" height="48" />
                         <rect x="156" y="50" width="7" height="30" />
                     </g>
-                    <rect x="0" y="80" width="200" height="40" fill="#121520" opacity="0.5"/>
+                    <rect x="0" y="80" width="200" height="40" fill="#121520" opacity="0.5" />
                 </svg>
-                
+
                 <!-- Huge Text Overlaying -->
-                <h1 class="text-[3.5rem] font-black tracking-widest logo-text-gradient absolute top-[40%] text-center w-full z-20" style="filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));">ASTITVA</h1>
+                <h1 class="text-[3.5rem] font-black tracking-widest logo-text-gradient absolute top-[40%] text-center w-full z-20"
+                    style="filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));">ASTITVA</h1>
 
                 <!-- Bottom Part with Mic -->
                 <div class="flex items-center justify-center w-full gap-4 mt-8 z-20">
                     <span class="font-bold text-xl tracking-wide uppercase">Scheme</span>
                     <!-- stylized mic -->
                     <div class="relative flex flex-col items-center justify-center">
-                        <div class="w-6 h-10 rounded-full bg-gradient-to-b from-brand-orange to-brand-red flex items-center justify-center svg-glow p-[2px]">
+                        <div
+                            class="w-6 h-10 rounded-full bg-gradient-to-b from-brand-orange to-brand-red flex items-center justify-center svg-glow p-[2px]">
                             <div class="w-full h-full border-2 border-[#121520]/50 rounded-full"></div>
                         </div>
-                        <div class="w-8 h-4 border-b-2 border-l-2 border-r-2 border-brand-orange rounded-b-xl absolute bottom-2"></div>
+                        <div
+                            class="w-8 h-4 border-b-2 border-l-2 border-r-2 border-brand-orange rounded-b-xl absolute bottom-2">
+                        </div>
                         <div class="h-4 w-0.5 bg-brand-orange mt-1"></div>
                         <div class="w-4 h-0.5 bg-brand-orange"></div>
                         <div class="absolute -left-6 top-1/2 w-4 h-[1.5px] bg-brand-orange"></div>
@@ -334,60 +367,85 @@
 
             <!-- Header Titles -->
             <div class="text-center mb-8 px-2">
-                <h2 class="text-[2rem] font-black text-gradient leading-tight mb-4" data-i18n="hero-title">Your Scheme Guardian</h2>
-                <p class="text-gray-400 text-sm font-medium" data-i18n="hero-subtitle">Empowering you with government schemes and support.</p>
+                <h2 class="text-[2rem] font-black text-gradient leading-tight mb-4" data-i18n="hero-title">Your Scheme
+                    Guardian</h2>
+                <p class="text-gray-400 text-sm font-medium" data-i18n="hero-subtitle">Empowering you with government
+                    schemes and support.</p>
             </div>
 
             <!-- Buttons -->
             <div class="flex items-center justify-center gap-4 w-full mb-10 px-4">
-                <button class="glass-btn px-6 py-3 rounded-full font-semibold text-sm flex-1 hover:scale-105 transition-transform" data-i18n="btn-explore" onclick="if(localStorage.getItem('astitva_user')){switchView(3);}else{switchView(1);}">Explore Schemes</button>
-                <button class="bg-gradient-to-r from-brand-orange to-brand-red px-6 py-3 rounded-full font-semibold text-sm flex-1 svg-glow hover:scale-105 transition-transform" data-i18n="btn-start" onclick="if(localStorage.getItem('astitva_user')){switchView(3);}else{switchView(1);}">Get Started</button>
+                <button
+                    class="glass-btn px-6 py-3 rounded-full font-semibold text-sm flex-1 hover:scale-105 transition-transform"
+                    data-i18n="btn-explore"
+                    onclick="if(localStorage.getItem('astitva_user')){switchView(3);}else{switchView(1);}">Explore
+                    Schemes</button>
+                <button
+                    class="bg-gradient-to-r from-brand-orange to-brand-red px-6 py-3 rounded-full font-semibold text-sm flex-1 svg-glow hover:scale-105 transition-transform"
+                    data-i18n="btn-start"
+                    onclick="if(localStorage.getItem('astitva_user')){switchView(3);}else{switchView(1);}">Get
+                    Started</button>
             </div>
 
             <!-- Bottom Features Grid -->
             <div class="grid grid-cols-3 gap-3 w-full px-2">
-                <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2 cursor-pointer hover:bg-white/10 transition-colors" onclick="if(localStorage.getItem('astitva_user')){switchView(3);}else{switchView(1);}">
-                    <div class="w-10 h-10 rounded-full border border-brand-orange/40 text-brand-orange flex items-center justify-center bg-brand-orange/10 mb-1">
+                <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2 cursor-pointer hover:bg-white/10 transition-colors"
+                    onclick="if(localStorage.getItem('astitva_user')){switchView(3);}else{switchView(1);}">
+                    <div
+                        class="w-10 h-10 rounded-full border border-brand-orange/40 text-brand-orange flex items-center justify-center bg-brand-orange/10 mb-1">
                         <span class="material-symbols-outlined text-[20px]">search</span>
                     </div>
                     <h3 class="text-[10px] font-bold text-gray-200" data-i18n="feat-discovery">Scheme Discovery</h3>
-                    <p class="text-[9px] text-gray-400" data-i18n="feat-discovery-sub">పథకాల అన్వేషణ<br/>योजना खोज</p>
+                    <p class="text-[9px] text-gray-400" data-i18n="feat-discovery-sub">పథకాల అన్వేషణ<br />योजना खोज</p>
                 </div>
-                <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2 cursor-pointer hover:bg-white/10 transition-colors" onclick="if(localStorage.getItem('astitva_user')){switchView(4);}else{switchView(1);}">
-                    <div class="w-10 h-10 rounded-full border border-brand-orange/40 text-brand-orange flex items-center justify-center bg-brand-orange/10 mb-1">
+                <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2 cursor-pointer hover:bg-white/10 transition-colors"
+                    onclick="if(localStorage.getItem('astitva_user')){switchView(4);}else{switchView(1);}">
+                    <div
+                        class="w-10 h-10 rounded-full border border-brand-orange/40 text-brand-orange flex items-center justify-center bg-brand-orange/10 mb-1">
                         <span class="material-symbols-outlined text-[20px]">description</span>
                     </div>
                     <h3 class="text-[10px] font-bold text-gray-200" data-i18n="feat-support">Application Support</h3>
-                    <p class="text-[9px] text-gray-400" data-i18n="feat-support-sub">దరఖాస్తు సహాయం<br/>आवेदन सहायता</p>
+                    <p class="text-[9px] text-gray-400" data-i18n="feat-support-sub">దరఖాస్తు సహాయం<br />आवेदन सहायता
+                    </p>
                 </div>
-                <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2 cursor-pointer hover:bg-white/10 transition-colors" onclick="if(localStorage.getItem('astitva_user')){switchView(6);}else{switchView(1);}">
-                    <div class="w-10 h-10 rounded-full border border-brand-orange/40 text-brand-orange flex items-center justify-center bg-brand-orange/10 mb-1">
+                <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2 cursor-pointer hover:bg-white/10 transition-colors"
+                    onclick="if(localStorage.getItem('astitva_user')){switchView(6);}else{switchView(1);}">
+                    <div
+                        class="w-10 h-10 rounded-full border border-brand-orange/40 text-brand-orange flex items-center justify-center bg-brand-orange/10 mb-1">
                         <span class="material-symbols-outlined text-[20px]">support_agent</span>
                     </div>
                     <h3 class="text-[10px] font-bold text-gray-200" data-i18n="feat-expert">Expert Guidance</h3>
-                    <p class="text-[9px] text-gray-400" data-i18n="feat-expert-sub">నిపుణుల మార్గదర్శకత్వం<br/>विशेषज्ञ मार्गदर्शन</p>
+                    <p class="text-[9px] text-gray-400" data-i18n="feat-expert-sub">నిపుణుల మార్గదర్శకత్వం<br />विशेषज्ञ
+                        मार्गदर्शन</p>
                 </div>
             </div>
-            
-            <button class="mt-8 text-gray-500 text-xs font-semibold animate-pulse" data-i18n="tap-start" onclick="switchView(1)">Tap to Start / ప్రారంభించడానికి నొక్కండి / शुरू करने के लिए टैप करें</button>
+
+            <button class="mt-8 text-gray-500 text-xs font-semibold animate-pulse" data-i18n="tap-start"
+                onclick="switchView(1)">Tap to Start / ప్రారంభించడానికి నొక్కండి / शुरू करने के लिए टैप करें</button>
         </div>
 
         <!-- VIEW 1: LANGUAGE -->
         <div id="view-1" class="view-section flex-col items-center justify-center flex-1 px-6">
-            <h2 class="text-3xl font-extrabold text-gradient mb-10 text-center" data-i18n="choose-lang">Choose Your Language</h2>
+            <h2 class="text-3xl font-extrabold text-gradient mb-10 text-center" data-i18n="choose-lang">Choose Your
+                Language</h2>
             <div class="flex flex-col gap-6 w-full">
-                <button id="lang-te" onclick="selectLang('te')" class="glass-panel rounded-[2rem] p-8 flex flex-col items-center justify-center relative overflow-hidden group border border-blue-500/30">
+                <button id="lang-te" onclick="selectLang('te')"
+                    class="glass-panel rounded-[2rem] p-8 flex flex-col items-center justify-center relative overflow-hidden group border border-blue-500/30">
                     <div class="absolute inset-0 bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors"></div>
-                    <div class="w-16 h-16 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mb-4 z-10 border border-blue-500/50">
+                    <div
+                        class="w-16 h-16 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mb-4 z-10 border border-blue-500/50">
                         <span class="material-symbols-outlined text-3xl">translate</span>
                     </div>
                     <h3 class="text-4xl font-black text-blue-100 z-10 tracking-wider">తెలుగు</h3>
                     <p class="text-blue-300 mt-2 font-semibold z-10">Telugu</p>
                 </button>
 
-                <button id="lang-hi" onclick="selectLang('hi')" class="glass-panel rounded-[2rem] p-8 flex flex-col items-center justify-center relative overflow-hidden group border border-brand-orange/30">
-                    <div class="absolute inset-0 bg-brand-orange/10 group-hover:bg-brand-orange/20 transition-colors"></div>
-                    <div class="w-16 h-16 rounded-full bg-brand-orange/20 text-brand-orange flex items-center justify-center mb-4 z-10 border border-brand-orange/50">
+                <button id="lang-hi" onclick="selectLang('hi')"
+                    class="glass-panel rounded-[2rem] p-8 flex flex-col items-center justify-center relative overflow-hidden group border border-brand-orange/30">
+                    <div class="absolute inset-0 bg-brand-orange/10 group-hover:bg-brand-orange/20 transition-colors">
+                    </div>
+                    <div
+                        class="w-16 h-16 rounded-full bg-brand-orange/20 text-brand-orange flex items-center justify-center mb-4 z-10 border border-brand-orange/50">
                         <span class="material-symbols-outlined text-3xl">translate</span>
                     </div>
                     <h3 class="text-4xl font-black text-brand-orange z-10 tracking-wider">हिन्दी</h3>
@@ -399,31 +457,37 @@
         <!-- VIEW 2: MIC -->
         <div id="view-2" class="view-section flex-col items-center justify-center flex-1 px-6">
             <div class="glass-panel rounded-[3rem] p-10 flex flex-col items-center w-full relative">
-                <h2 id="mic-headline" class="text-2xl font-bold text-center mb-10" data-i18n="mic-question">What is your name?</h2>
-                
+                <h2 id="mic-headline" class="text-2xl font-bold text-center mb-10" data-i18n="mic-question">What is your
+                    name?</h2>
+
                 <!-- Main Microphone (Hidden during Confirmations) -->
-                <button id="main-mic-btn" class="relative w-36 h-36 rounded-full bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center shadow-[0_0_40px_rgba(59,130,246,0.6)] mb-8">
+                <button id="main-mic-btn"
+                    class="relative w-36 h-36 rounded-full bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center shadow-[0_0_40px_rgba(59,130,246,0.6)] mb-8">
                     <div class="absolute inset-0 rounded-full border-2 border-blue-400 animate-ping opacity-75"></div>
                     <div class="absolute inset-0 rounded-full border-[10px] border-blue-500/20 animate-pulse"></div>
                     <span class="material-symbols-outlined text-6xl text-white relative z-10">mic</span>
                 </button>
-                
+
                 <!-- Visual YES / NO Confirmation Buttons (Hidden by Default) -->
                 <div id="yes-no-container" class="hidden flex gap-6 w-full justify-center mb-8">
-                    <button id="btn-visual-yes" class="relative w-32 h-32 rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-400 flex flex-col items-center justify-center shadow-[0_0_40px_rgba(16,185,129,0.4)] border-2 border-emerald-300 transition-transform active:scale-95">
+                    <button id="btn-visual-yes"
+                        class="relative w-32 h-32 rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-400 flex flex-col items-center justify-center shadow-[0_0_40px_rgba(16,185,129,0.4)] border-2 border-emerald-300 transition-transform active:scale-95">
                         <span class="material-symbols-outlined text-5xl text-white font-bold mb-1">check_circle</span>
                         <span class="text-white font-black tracking-wider">YES</span>
                     </button>
-                    
-                    <button id="btn-visual-no" class="relative w-32 h-32 rounded-3xl bg-gradient-to-br from-brand-red to-red-400 flex flex-col items-center justify-center shadow-[0_0_40px_rgba(239,68,68,0.4)] border-2 border-red-300 transition-transform active:scale-95">
+
+                    <button id="btn-visual-no"
+                        class="relative w-32 h-32 rounded-3xl bg-gradient-to-br from-brand-red to-red-400 flex flex-col items-center justify-center shadow-[0_0_40px_rgba(239,68,68,0.4)] border-2 border-red-300 transition-transform active:scale-95">
                         <span class="material-symbols-outlined text-5xl text-white font-bold mb-1">cancel</span>
                         <span class="text-white font-black tracking-wider">NO</span>
                     </button>
                 </div>
-                
+
                 <p id="mic-status" class="text-gray-300 font-semibold text-lg" data-i18n="tap-speak">Tap to speak</p>
-                <div class="mt-4 w-full h-20 bg-black/40 rounded-xl border border-white/10 flex items-center justify-center p-3">
-                    <p id="mic-transcript" class="text-white text-center text-sm font-medium animate-pulse">Listening... / వింటున్నాను... / सुन रहा हूँ...</p>
+                <div
+                    class="mt-4 w-full h-20 bg-black/40 rounded-xl border border-white/10 flex items-center justify-center p-3">
+                    <p id="mic-transcript" class="text-white text-center text-sm font-medium animate-pulse">Listening...
+                        / వింటున్నాను... / सुन रहा हूँ...</p>
                 </div>
             </div>
         </div>
@@ -431,78 +495,98 @@
         <!-- VIEW 3: DASHBOARD -->
         <!-- VIEW 3: DASHBOARD (SMART AI RAG) -->
         <div id="view-3" class="view-section flex-col flex-1 px-4 pt-[140px] pb-8 relative">
-            
+
             <!-- Dashboard Header -->
             <div class="flex justify-between items-center w-full mb-8">
                 <div>
-                   <h2 class="text-3xl font-black text-white pl-2" id="dash-greeting">Hello!</h2>
-                   <p class="text-brand-orange text-sm font-bold tracking-widest pl-2 uppercase">Astitva AI Assistant</p>
+                    <h2 class="text-3xl font-black text-white pl-2" id="dash-greeting">Hello!</h2>
+                    <p class="text-brand-orange text-sm font-bold tracking-widest pl-2 uppercase">Astitva AI Assistant
+                    </p>
                 </div>
-                
+
                 <div class="flex gap-2">
-                  <button onclick="localStorage.removeItem('astitva_user'); location.reload();" class="w-10 h-10 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center hover:bg-red-500/30 transition-all text-red-500">
-                      <span class="material-symbols-outlined text-[20px]">restart_alt</span>
-                  </button>
-                  <button onclick="showProfile()" class="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all">
-                      <span class="material-symbols-outlined text-brand-orange text-[24px]">account_circle</span>
-                  </button>
+                    <button onclick="localStorage.removeItem('astitva_user'); location.reload();"
+                        class="w-10 h-10 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center hover:bg-red-500/30 transition-all text-red-500">
+                        <span class="material-symbols-outlined text-[20px]">restart_alt</span>
+                    </button>
+                    <button onclick="showProfile()"
+                        class="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all">
+                        <span class="material-symbols-outlined text-brand-orange text-[24px]">account_circle</span>
+                    </button>
                 </div>
             </div>
-            
+
             <!-- THE NEW GEMINI AI MIC TRIGGER -->
-            <button onclick="startGeminiVoiceSearch()" id="gemini-mic-btn" class="w-full glass-panel rounded-[2.5rem] p-10 flex flex-col items-center justify-center border border-blue-500/30 hover:bg-blue-900/10 hover:border-blue-500/50 transition-all relative overflow-hidden group mb-8 shadow-[0_0_30px_rgba(59,130,246,0.15)] mt-4">
-                <div class="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-indigo-600/10 group-hover:from-blue-600/20 group-hover:to-indigo-600/20 transition-colors"></div>
-                
-                <div class="w-28 h-28 rounded-full flex items-center justify-center mb-6 relative z-10" style="background: linear-gradient(135deg, #3b82f6, #4f46e5); box-shadow: 0 10px 30px rgba(59,130,246,0.4)">
-                   <div class="absolute inset-0 rounded-full border-4 border-white/20 animate-ping opacity-50"></div>
-                   <span class="material-symbols-outlined text-white" style="font-size: 56px">mic</span>
+            <button onclick="startGeminiVoiceSearch()" id="gemini-mic-btn"
+                class="w-full glass-panel rounded-[2.5rem] p-10 flex flex-col items-center justify-center border border-blue-500/30 hover:bg-blue-900/10 hover:border-blue-500/50 transition-all relative overflow-hidden group mb-8 shadow-[0_0_30px_rgba(59,130,246,0.15)] mt-4">
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-indigo-600/10 group-hover:from-blue-600/20 group-hover:to-indigo-600/20 transition-colors">
                 </div>
-                
+
+                <div class="w-28 h-28 rounded-full flex items-center justify-center mb-6 relative z-10"
+                    style="background: linear-gradient(135deg, #3b82f6, #4f46e5); box-shadow: 0 10px 30px rgba(59,130,246,0.4)">
+                    <div class="absolute inset-0 rounded-full border-4 border-white/20 animate-ping opacity-50"></div>
+                    <span class="material-symbols-outlined text-white" style="font-size: 56px">mic</span>
+                </div>
+
                 <h3 class="text-2xl font-black text-white relative z-10 mb-2" data-i18n="ask-ai">Ask AI Expert</h3>
-                <p class="text-blue-200 font-medium text-center relative z-10 text-sm">మాట్లాడటానికి నొక్కండి / बात करने के लिए टैप करें</p>
-                
-                <div class="mt-6 px-4 py-2 bg-black/40 rounded-full border border-white/10 flex items-center gap-2 relative z-10">
-                   <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse hidden" id="gemini-mic-pulse"></div>
-                   <span class="text-xs text-gray-300 font-mono tracking-wider" id="gemini-mic-status">Tap to speak your needs</span>
+                <p class="text-blue-200 font-medium text-center relative z-10 text-sm">మాట్లాడటానికి నొక్కండి / बात करने
+                    के लिए टैप करें</p>
+
+                <div
+                    class="mt-6 px-4 py-2 bg-black/40 rounded-full border border-white/10 flex items-center gap-2 relative z-10">
+                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse hidden" id="gemini-mic-pulse"></div>
+                    <span class="text-xs text-gray-300 font-mono tracking-wider" id="gemini-mic-status">Tap to speak
+                        your needs</span>
                 </div>
             </button>
-            
 
-            
-            <button onclick="document.body.requestFullscreen()" class="w-full text-center text-xs text-gray-600 mt-2 hover:text-white">Fullscreen Mode</button>
+
+
+            <button onclick="document.body.requestFullscreen()"
+                class="w-full text-center text-xs text-gray-600 mt-2 hover:text-white">Fullscreen Mode</button>
         </div>
 
         <!-- VIEW 4: GEMINI AI RESULTS -->
         <div id="view-4" class="view-section flex-col flex-1 px-4 pt-[140px] pb-8 overflow-y-auto">
             <h2 class="text-2xl font-black text-white mb-2 text-center" id="results-headline">AI Recommendations</h2>
-            <p class="text-gray-400 text-center text-sm font-medium mb-8" id="results-sub">మీ కోసం ఎంపిక చేయబడిన పథకాలు</p>
-            
+            <p class="text-gray-400 text-center text-sm font-medium mb-8" id="results-sub">మీ కోసం ఎంపిక చేయబడిన పథకాలు
+            </p>
+
             <!-- Dynamic container for array of matching schemes -->
             <div id="gemini-results-container" class="w-full flex flex-col gap-6"></div>
-            
-            <button onclick="switchView(3)" class="w-full py-5 rounded-3xl font-bold text-white text-lg mt-8 border-2 border-white/10 hover:bg-white/5 transition-colors">
-                ← ${currentLang === 'te' ? 'వెనుకకు' : (currentLang === 'hi' ? 'वापस' : 'Back')}
+
+            <button onclick="switchView(3)"
+                class="w-full py-5 rounded-3xl font-bold text-white text-lg mt-8 border-2 border-white/10 hover:bg-white/5 transition-colors" data-i18n="btn-back">
+                ← Back
             </button>
         </div>
 
         <!-- VIEW 5: DOC CHECK -->
         <div id="view-5" class="view-section flex-col items-center justify-center flex-1 px-4 pt-[140px]">
-            <h2 class="text-2xl font-black text-gradient text-center mb-2" data-i18n="doc-check-title">Do you have Aadhaar Card?</h2>
-            <p class="text-gray-400 text-center mb-10 font-medium" data-i18n="doc-check-sub">మీ దగ్గర ఆధార్ కార్డు ఉందా? / क्या आपके पास आधार कार्ड है?</p>
-            
+            <h2 class="text-2xl font-black text-gradient text-center mb-2" data-i18n="doc-check-title">Do you have
+                Aadhaar Card?</h2>
+            <p class="text-gray-400 text-center mb-10 font-medium" data-i18n="doc-check-sub">మీ దగ్గర ఆధార్ కార్డు ఉందా?
+                / क्या आपके पास आधार कार्ड है?</p>
+
             <div class="flex flex-col gap-6 w-full max-w-sm">
-                <button onclick="switchView(6)" id="btn-yes" class="glass-panel rounded-[2rem] p-8 flex flex-col items-center justify-center border border-emerald-500/30 hover:bg-white/10 transition-colors relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-emerald-500/10 group-hover:bg-emerald-500/20 transition-colors"></div>
-                    <div class="w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 border border-emerald-500/50 shadow-[0_0_20px_rgba(52,211,153,0.3)] z-10">
+                <button onclick="switchView(6)" id="btn-yes"
+                    class="glass-panel rounded-[2rem] p-8 flex flex-col items-center justify-center border border-emerald-500/30 hover:bg-white/10 transition-colors relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-emerald-500/10 group-hover:bg-emerald-500/20 transition-colors">
+                    </div>
+                    <div
+                        class="w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 border border-emerald-500/50 shadow-[0_0_20px_rgba(52,211,153,0.3)] z-10">
                         <span class="material-symbols-outlined text-5xl">check</span>
                     </div>
                     <h3 class="text-4xl font-black text-emerald-400 z-10 tracking-widest" data-i18n="yes">YES</h3>
                     <p class="text-gray-300 font-semibold mt-2 z-10" data-i18n="yes-sub">అవును / हाँ</p>
                 </button>
 
-                <button onclick="switchView(6)" id="btn-no" class="glass-panel rounded-[2rem] p-8 flex flex-col items-center justify-center border border-brand-red/30 hover:bg-white/10 transition-colors relative overflow-hidden group">
+                <button onclick="switchView(6)" id="btn-no"
+                    class="glass-panel rounded-[2rem] p-8 flex flex-col items-center justify-center border border-brand-red/30 hover:bg-white/10 transition-colors relative overflow-hidden group">
                     <div class="absolute inset-0 bg-brand-red/10 group-hover:bg-brand-red/20 transition-colors"></div>
-                    <div class="w-20 h-20 rounded-full bg-brand-red/20 text-brand-red flex items-center justify-center mb-4 border border-brand-red/50 shadow-[0_0_20px_rgba(239,68,68,0.3)] z-10">
+                    <div
+                        class="w-20 h-20 rounded-full bg-brand-red/20 text-brand-red flex items-center justify-center mb-4 border border-brand-red/50 shadow-[0_0_20px_rgba(239,68,68,0.3)] z-10">
                         <span class="material-symbols-outlined text-5xl">close</span>
                     </div>
                     <h3 class="text-4xl font-black text-brand-red z-10 tracking-widest" data-i18n="no">NO</h3>
@@ -513,27 +597,36 @@
 
         <!-- VIEW 6: EXPERT (CLONE FROM IMAGE_7.png layout) -->
         <div id="view-6" class="view-section flex-col flex-1 px-4 pt-[140px] pb-8">
-            <h2 class="text-2xl font-black text-gradient text-center mb-6" data-i18n="expert-title">Meet Your Local Rural Guardian</h2>
-            
+            <h2 class="text-2xl font-black text-gradient text-center mb-6" data-i18n="expert-title">Meet Your Local
+                Rural Guardian</h2>
+
             <div class="w-full flex flex-col gap-4">
                 <!-- Expert Profile Top Card -->
                 <div class="glass-panel rounded-3xl p-5 flex items-center gap-4">
-                    <div class="relative w-24 h-24 flex-shrink-0 rounded-full bg-gradient-to-br from-brand-orange to-brand-red p-1">
-                        <div class="w-full h-full rounded-full bg-navy flex items-center justify-center overflow-hidden border-2 border-navy">
+                    <div
+                        class="relative w-24 h-24 flex-shrink-0 rounded-full bg-gradient-to-br from-brand-orange to-brand-red p-1">
+                        <div
+                            class="w-full h-full rounded-full bg-navy flex items-center justify-center overflow-hidden border-2 border-navy">
                             <!-- Placeholder avatar -->
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Priya&backgroundColor=121520" alt="Priya" class="w-full h-full object-cover"/>
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Priya&backgroundColor=121520"
+                                alt="Priya" class="w-full h-full object-cover" />
                         </div>
-                        <div class="absolute -bottom-1 right-2 w-5 h-5 bg-emerald-500 rounded-full border-2 border-navy flex items-center justify-center"></div>
+                        <div
+                            class="absolute -bottom-1 right-2 w-5 h-5 bg-emerald-500 rounded-full border-2 border-navy flex items-center justify-center">
+                        </div>
                     </div>
                     <div class="flex flex-col">
                         <h3 class="text-xl font-bold text-white leading-tight">Priya Sharma</h3>
-                        <p class="text-brand-orange text-sm font-semibold mb-1" data-i18n="expert-role">Rural Guardian</p>
+                        <p class="text-brand-orange text-sm font-semibold mb-1" data-i18n="expert-role">Rural Guardian
+                        </p>
                         <div class="flex items-center gap-1 mb-2">
                             <span class="material-symbols-outlined text-brand-yellow text-[16px]">star</span>
                             <span class="text-white font-bold text-sm">4.9</span>
                             <span class="text-gray-400 text-xs">(127)</span>
                         </div>
-                        <button class="bg-white/10 border border-white/20 text-white text-xs font-semibold py-1 px-3 rounded-full self-start" data-i18n="view-profile">View Profile</button>
+                        <button
+                            class="bg-white/10 border border-white/20 text-white text-xs font-semibold py-1 px-3 rounded-full self-start"
+                            data-i18n="view-profile">View Profile</button>
                     </div>
                 </div>
 
@@ -545,37 +638,45 @@
                             <span data-i18n="chat-title">Chat with Priya</span>
                         </h4>
                     </div>
-                    
+
                     <div class="flex-1 overflow-y-auto pr-2 space-y-4 flex flex-col">
                         <!-- Bot Msg -->
                         <div class="flex gap-2 max-w-[85%]">
-                            <div class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+                            <div
+                                class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
                                 <span class="material-symbols-outlined text-brand-orange text-sm">support_agent</span>
                             </div>
                             <div class="glass-btn rounded-2xl rounded-tl-sm px-4 py-3">
-                                <p class="text-xs text-gray-200 leading-relaxed" data-i18n="chat-msg-1">Namaste! I'm Priya, your local scheme expert. How can I help you today?</p>
+                                <p class="text-xs text-gray-200 leading-relaxed" data-i18n="chat-msg-1">Namaste! I'm
+                                    Priya, your local scheme expert. How can I help you today?</p>
                             </div>
                         </div>
                         <!-- User Msg -->
                         <div class="flex gap-2 max-w-[85%] self-end flex-row-reverse">
-                            <div class="bg-gradient-to-br from-brand-orange to-brand-red rounded-2xl rounded-tr-sm px-4 py-3 shadow-[0_0_15px_rgba(251,146,60,0.3)]">
-                                <p class="text-xs text-white leading-relaxed font-medium" data-i18n="chat-msg-2">I need help applying for Aarogyasri</p>
+                            <div
+                                class="bg-gradient-to-br from-brand-orange to-brand-red rounded-2xl rounded-tr-sm px-4 py-3 shadow-[0_0_15px_rgba(251,146,60,0.3)]">
+                                <p class="text-xs text-white leading-relaxed font-medium" data-i18n="chat-msg-2">I need
+                                    help applying for Aarogyasri</p>
                             </div>
                         </div>
                         <!-- Bot Msg -->
                         <div class="flex gap-2 max-w-[85%]">
-                            <div class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+                            <div
+                                class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
                                 <span class="material-symbols-outlined text-brand-orange text-sm">support_agent</span>
                             </div>
                             <div class="glass-btn rounded-2xl rounded-tl-sm px-4 py-3">
-                                <p class="text-xs text-gray-200 leading-relaxed" data-i18n="chat-msg-3">I can guide you through the entire process. Do you have your Aadhaar and ration card ready?</p>
+                                <p class="text-xs text-gray-200 leading-relaxed" data-i18n="chat-msg-3">I can guide you
+                                    through the entire process. Do you have your Aadhaar and ration card ready?</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-4 relative">
-                        <input type="text" placeholder="Type your message..." class="w-full bg-white/5 border border-white/10 rounded-full py-3 px-5 text-sm outline-none focus:border-brand-orange/50 transition-colors text-white">
-                        <button class="absolute right-1.5 top-1.5 w-9 h-9 rounded-full bg-gradient-to-br from-brand-orange to-brand-red flex items-center justify-center shadow-md">
+                        <input type="text" placeholder="Type your message..."
+                            class="w-full bg-white/5 border border-white/10 rounded-full py-3 px-5 text-sm outline-none focus:border-brand-orange/50 transition-colors text-white">
+                        <button
+                            class="absolute right-1.5 top-1.5 w-9 h-9 rounded-full bg-gradient-to-br from-brand-orange to-brand-red flex items-center justify-center shadow-md">
                             <span class="material-symbols-outlined text-white text-[18px] ml-0.5">send</span>
                         </button>
                     </div>
@@ -583,13 +684,19 @@
 
                 <!-- Massive Action Buttons -->
                 <div class="flex flex-col gap-3 mt-2">
-                    <button class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 flex items-center justify-center gap-3 shadow-[0_4px_20px_rgba(16,185,129,0.4)] active:scale-[0.98] transition-all" onclick="window.location.href='tel:104'">
+                    <button
+                        class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 flex items-center justify-center gap-3 shadow-[0_4px_20px_rgba(16,185,129,0.4)] active:scale-[0.98] transition-all"
+                        onclick="window.location.href='tel:104'">
                         <span class="material-symbols-outlined text-white">call</span>
-                        <span class="font-bold text-white text-lg tracking-wide" data-i18n="call-expert">Call Priya / ప్రియ కి కాల్ చేయండి / प्रिया को कॉल करें</span>
+                        <span class="font-bold text-white text-lg tracking-wide" data-i18n="call-expert">Call Priya /
+                            ప్రియ కి కాల్ చేయండి / प्रिया को कॉल करें</span>
                     </button>
-                    <button class="w-full py-4 rounded-2xl glass-btn flex items-center justify-center gap-3 active:scale-[0.98] transition-all" onclick="window.open('https://wa.me/91104', '_blank')">
+                    <button
+                        class="w-full py-4 rounded-2xl glass-btn flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+                        onclick="window.open('https://wa.me/91104', '_blank')">
                         <span class="material-symbols-outlined text-green-400">forum</span>
-                        <span class="font-bold text-white text-lg tracking-wide" data-i18n="wa-expert">WhatsApp Priya / వాట్సాప్ సందేశం / व्हाट्सएप संदेश</span>
+                        <span class="font-bold text-white text-lg tracking-wide" data-i18n="wa-expert">WhatsApp Priya /
+                            వాట్సాప్ సందేశం / व्हाट्सएप संदेश</span>
                     </button>
                 </div>
             </div>
@@ -622,7 +729,7 @@
                 'doc-aadhaar': 'Aadhaar Card', 'doc-ration': 'Ration Card', 'doc-income': 'Income Proof',
                 'scheme-desc': 'This scheme provides <span class="text-brand-orange font-bold">free health coverage up to 5 lakhs</span> per family per year for hospitalization expenses. It covers <span class="text-emerald-400 font-bold">938 medical procedures</span> across network hospitals.',
                 'eligibility-title': 'Eligibility', 'elig-1': 'BPL families with white ration card', 'elig-2': 'Annual income below 5 lakhs',
-                'btn-check-elig': 'Check Eligibility', 'btn-get-help': 'Get Help',
+                'btn-check-elig': 'Check Eligibility', 'btn-get-help': 'Get Help', 'btn-back': '← Back',
                 'doc-check-title': 'Do you have Aadhaar Card?', 'doc-check-sub': 'Need it to process application',
                 'yes': 'YES', 'yes-sub': 'I have it', 'no': 'NO', 'no-sub': 'I don\'t have it',
                 'expert-title': 'Meet Your Local Rural Guardian', 'expert-role': 'Rural Guardian', 'view-profile': 'View Profile',
@@ -652,7 +759,7 @@
                 'doc-aadhaar': 'ఆధార్ కార్డు', 'doc-ration': 'రేషన్ కార్డు', 'doc-income': 'ఆదాయ ధృవీకరణ',
                 'scheme-desc': 'ఈ పథకం కింద ఆసుపత్రి ఖర్చుల కోసం కుటుంబానికి సంవత్సరానికి <span class="text-brand-orange font-bold">5 లక్షల వరకు ఉచిత ఆరోగ్య భద్రత</span> అందిస్తుంది. నెట్‌వర్క్ ఆసుపత్రులలో <span class="text-emerald-400 font-bold">938 వైద్య విధానాలను</span> కవర్ చేస్తుంది.',
                 'eligibility-title': 'అర్హత', 'elig-1': 'తెల్ల రేషన్ కార్డు ఉన్న బీపీఎల్ కుటుంబాలు', 'elig-2': 'వార్షిక ఆదాయం 5 లక్షల లోపు',
-                'btn-check-elig': 'అర్హత తనిఖీ చేయండి', 'btn-get-help': 'సహాయం పొందండి',
+                'btn-check-elig': 'అర్హత తనిఖీ చేయండి', 'btn-get-help': 'సహాయం పొందండి', 'btn-back': '← వెనుకకు',
                 'doc-check-title': 'మీ దగ్గర ఆధార్ కార్డు ఉందా?', 'doc-check-sub': 'దరఖాస్తు చేయడానికి ఇది అవసరం',
                 'yes': 'అవును', 'yes-sub': 'ఉంది', 'no': 'లేదు', 'no-sub': 'లేదు',
                 'expert-title': 'మీ స్థానిక గార్డియన్‌ను కలవండి', 'expert-role': 'రూరల్ గార్డియన్', 'view-profile': 'ప్రొఫైల్ చూడండి',
@@ -682,7 +789,7 @@
                 'doc-aadhaar': 'आधार कार्ड', 'doc-ration': 'राशन कार्ड', 'doc-income': 'आय प्रमाण',
                 'scheme-desc': 'यह योजना अस्पताल के खर्च के लिए प्रति परिवार प्रति वर्ष <span class="text-brand-orange font-bold">5 लाख तक का मुफ्त स्वास्थ्य कवर</span> प्रदान करती है। यह नेटवर्क अस्पतालों में <span class="text-emerald-400 font-bold">938 चिकित्सा प्रक्रियाओं</span> को कवर करती है।',
                 'eligibility-title': 'पात्रता', 'elig-1': 'सफेद राशन कार्ड वाले बीपीएल परिवार', 'elig-2': 'वार्षिक आय 5 लाख से कम',
-                'btn-check-elig': 'पात्रता जांचें', 'btn-get-help': 'मदद प्राप्त करें',
+                'btn-check-elig': 'पात्रता जांचें', 'btn-get-help': 'मदद प्राप्त करें', 'btn-back': '← वापस',
                 'doc-check-title': 'क्या आपके पास आधार कार्ड है?', 'doc-check-sub': 'आवेदन की प्रक्रिया के लिए जरूरी है',
                 'yes': 'हाँ', 'yes-sub': 'मेरे पास है', 'no': 'नहीं', 'no-sub': 'मेरे पास नहीं है',
                 'expert-title': 'अपने स्थानीय रक्षक से मिलें', 'expert-role': 'ग्रामीण रक्षक', 'view-profile': 'प्रोफाइल देखें',
@@ -698,14 +805,14 @@
             // Hide all views
             for (let i = 0; i <= 6; i++) {
                 const el = document.getElementById(`view-${i}`);
-                if(el) {
+                if (el) {
                     el.classList.remove('view-active');
                 }
             }
-            
+
             // Show target view
             const target = document.getElementById(`view-${viewId}`);
-            if(target) {
+            if (target) {
                 target.classList.add('view-active');
             }
 
@@ -727,7 +834,7 @@
             }
 
 
-            
+
             window.scrollTo(0, 0);
         }
 
@@ -753,7 +860,7 @@
                 container.classList.remove('toggle-hi');
             }
             applyLanguage();
-            
+
             if (typeof goToNextAfterLanguage === 'function') {
                 goToNextAfterLanguage(lang);
             } else {
@@ -764,7 +871,8 @@
         function applyLanguage() {
             const elements = document.querySelectorAll('[data-i18n]');
             const dict = i18nData[currentLang];
-            
+            if (!dict) return;
+
             elements.forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (dict[key]) {
@@ -775,25 +883,26 @@
 
         // Initialize display
         window.addEventListener('DOMContentLoaded', () => {
-             const savedLang = localStorage.getItem('astitva_lang');
-             if (savedLang) {
-                 currentLang = savedLang;
-                 if (document.getElementById('lang-toggle-btn') && savedLang === 'hi') {
-                     document.getElementById('lang-toggle-btn').classList.add('toggle-hi');
-                 }
-             }
+            const savedLang = localStorage.getItem('astitva_lang');
+            if (savedLang) {
+                currentLang = savedLang;
+                if (document.getElementById('lang-toggle-btn') && savedLang === 'hi') {
+                    document.getElementById('lang-toggle-btn').classList.add('toggle-hi');
+                }
+            }
 
-             const saved = localStorage.getItem('astitva_user');
-             if (saved && saved.includes('name')) {
-                 switchView(3);
-             } else {
-                 switchView(0);
-             }
-             applyLanguage();
+            const saved = localStorage.getItem('astitva_user');
+            if (saved && saved.includes('name')) {
+                switchView(3);
+            } else {
+                switchView(0);
+            }
+            applyLanguage();
         });
     </script>
     <!-- Astitva DB and Core Logic Wiring -->
     <script src="database.js"></script>
     <script src="app.js"></script>
 </body>
+
 </html>
