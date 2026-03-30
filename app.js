@@ -215,13 +215,13 @@ function listenForName() {
     listen((transcript) => {
         if(transcript) {
             let safeName = sanitizePhonetic(transcript);
-            let pTe = safeName ? `Mee peru ${safeName} aa-na? Avunu leda kaadu ani cheppandi.` : `Idi sarainadena? Avunu leda kaadu ani cheppandi.`;
+            let pTe = safeName ? `Mee peru ${safeName} ye-na? Avunu leda kaadu ani cheppandi.` : `Idi sarainadena? Avunu leda kaadu ani cheppandi.`;
             let pHi = safeName ? `Kya aapka naam ${safeName} hai? Haan ya na kahein.` : `Kya yeh sahi hai? Haan ya na kahein.`;
             
             confirmInput({
-                title: currentLang === 'te' ? `మీ పేరు ${transcript} ఆనా?` : `क्या आपका नाम ${transcript} है?`,
+                title: currentLang === 'te' ? `మీ పేరు ${transcript} యేనా?` : `क्या आपका नाम ${transcript} है?`,
                 status: currentLang === 'te' ? "అవును లేదా కాదు చెప్పండి" : "हाँ या ना कहें",
-                speech: currentLang === 'te' ? `మీ పేరు ${transcript} ఆనా? అవును లేదా కాదు అని చెప్పండి.` : `क्या आपका नाम ${transcript} है? हाँ या ना कहें।`,
+                speech: currentLang === 'te' ? `మీ పేరు ${transcript} యేనా? అవును లేదా కాదు అని చెప్పండి.` : `क्या आपका नाम ${transcript} है? हाँ या ना कहें।`,
                 phonetic: currentLang === 'te' ? pTe : pHi
             }, () => {
                 appState.userName = transcript;
@@ -473,10 +473,10 @@ function askAgeFlow() {
                 if(numMatch) {
                     const extractedAge = numMatch[0];
                     confirmInput({
-                        title: currentLang === 'te' ? `మీ వయస్సు ${extractedAge} ఆనా?` : `क्या आपकी उम्र ${extractedAge} है?`,
+                        title: currentLang === 'te' ? `మీ వయస్సు ${extractedAge} యేనా?` : `क्या आपकी उम्र ${extractedAge} है?`,
                         status: currentLang === 'te' ? "అవును లేదా కాదు చెప్పండి" : "हाँ या ना कहें",
-                        speech: currentLang === 'te' ? `మీ వయస్సు ${extractedAge} ఆనా?` : `क्या आपकी उम्र ${extractedAge} है?`,
-                        phonetic: currentLang === 'te' ? `Mee vayasu ${extractedAge} aa-na? Avunu leda kaadu ani cheppandi.` : `Kya aapki umra ${extractedAge} hai? Haan ya na kahein.`
+                        speech: currentLang === 'te' ? `మీ వయస్సు ${extractedAge} యేనా?` : `क्या आपकी उम्र ${extractedAge} है?`,
+                        phonetic: currentLang === 'te' ? `Mee vayasu ${extractedAge} ye-na? Avunu leda kaadu ani cheppandi.` : `Kya aapki umra ${extractedAge} hai? Haan ya na kahein.`
                     }, () => {
                         appState.userAge = extractedAge;
                         askOccFlow();
@@ -514,13 +514,13 @@ function askOccFlow() {
         listen((occTranscript) => {
             if(occTranscript) {
                 let safeOcc = sanitizePhonetic(occTranscript);
-                let pTe = safeOcc ? `Mee vrutti ${safeOcc} aa-na? Avunu leda kaadu cheppandi.` : `Idi sarainadena? Avunu leda kaadu ani cheppandi.`;
+                let pTe = safeOcc ? `Mee vrutti ${safeOcc} ye-na? Avunu leda kaadu cheppandi.` : `Idi sarainadena? Avunu leda kaadu ani cheppandi.`;
                 let pHi = safeOcc ? `Kya aapka kaam ${safeOcc} hai? Haan ya na kahein.` : `Kya yeh sahi hai? Haan ya na kahein.`;
                 
                 confirmInput({
-                    title: currentLang === 'te' ? `మీ వృత్తి ${occTranscript} ఆనా?` : `क्या आपका काम ${occTranscript} है?`,
+                    title: currentLang === 'te' ? `మీ వృత్తి ${occTranscript} యేనా?` : `क्या आपका काम ${occTranscript} है?`,
                     status: currentLang === 'te' ? "అవును లేదా కాదు చెప్పండి" : "हाँ या ना कहें",
-                    speech: currentLang === 'te' ? `మీ వృత్తి ${occTranscript} ఆనా?` : `क्या आपका काम ${occTranscript} है?`,
+                    speech: currentLang === 'te' ? `మీ వృత్తి ${occTranscript} యేనా?` : `क्या आपका काम ${occTranscript} है?`,
                     phonetic: currentLang === 'te' ? pTe : pHi
                 }, () => {
                     appState.userOcc = occTranscript;
@@ -806,16 +806,16 @@ async function callGeminiDirect({ query, messages, lang, profile, db, mode }) {
     let sysInstruction, contentText;
 
     if (mode === 'rag') {
-        sysInstruction = `You are Priya, an expert Indian Government welfare scheme recommender for rural, non-literate users.
+        sysInstruction = `You are Disha, an expert Indian Government welfare scheme recommender for rural, non-literate users.
 The user's spoken language is: ${uLang}.
 User Profile: Name: ${pName}, Age: ${pAge}, Occupation: ${pOcc}.
 Database of schemes: ${JSON.stringify((db || []).slice(0, 20))}.
 
-TASK: Match their problem against exact schemes. Return ONLY valid JSON:
-{ "speech": "Empathetic answer in ${uLang} script", "speech_phonetic": "Same answer in Latin script", "scheme_ids": ["ID1"] }`;
+TASK: Match their problem against exact schemes. Write a fluent, conversational 2-sentence response explaining EXACTLY what the scheme is and its specific benefits in their spoken language. Return ONLY valid JSON:
+{ "speech": "Empathetic detailed answer in ${uLang} script", "speech_phonetic": "Same detailed answer in Latin script", "scheme_ids": ["ID1"] }`;
         contentText = "Query: " + (query || "");
     } else {
-        sysInstruction = `You are Priya, a helpful local rural scheme expert. Be extremely empathetic and concise. No markdown.
+        sysInstruction = `You are Disha, a helpful local rural scheme expert. Be extremely empathetic and concise. No markdown.
 The user's spoken language is: ${uLang}.
 TASK: Answer the question. Return ONLY valid JSON:
 { "reply": "Concise empathetic answer in ${uLang} script", "reply_phonetic": "Same in Latin script" }`;

@@ -22,7 +22,7 @@ exports.handler = async function(event, context) {
         
         if (!isChatMode) {
             // VIEW 3 / 4 RAG RECOMMENDER MODE
-            sysInstruction = `You are Priya, an expert Indian Government welfare scheme recommender for rural, non-literate users.
+            sysInstruction = `You are Disha, an expert Indian Government welfare scheme recommender for rural, non-literate users.
 The user's spoken language is: ${uLang}.
 User Profile: Name: ${pName}, Age: ${pAge}, Occupation: ${pOcc}.
 Database of schemes: ${JSON.stringify(db || [])}.
@@ -30,7 +30,7 @@ Database of schemes: ${JSON.stringify(db || [])}.
 TASK:
 1. Match their problem against exact schemes.
 2. Select the best 1-2 matching scheme IDs.
-3. Write a brief empathetic response explaining how it helps.
+3. Write a fluent, conversational 2-sentence response explaining EXACTLY what the recommended scheme is and what specific benefits it provides (e.g., "I found the Mahalakshmi scheme for you. It provides 2500 rupees every month..."). Speak naturally as if you are talking directly to them.
 
 CRITICAL: YOU MUST RETURN RAW JSON ONLY.
 Required Schema:
@@ -43,7 +43,7 @@ Required Schema:
             jsonResponseSchema = "application/json";
         } else {
             // VIEW 6 EXPERT CHAT MODE
-            sysInstruction = `You are Priya, a helpful local rural scheme expert. Be extremely empathetic and concise. Do not use markdown.
+            sysInstruction = `You are Disha, a helpful local rural scheme expert. Be extremely empathetic and concise. Do not use markdown.
 The user's spoken language is: ${uLang}.
 
 TASK: Answer the user's specific question about the scheme concisely.
