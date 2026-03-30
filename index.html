@@ -297,11 +297,18 @@
                         Priya</button>
                 </div>
 
-                <!-- Language Toggle Pill -->
-                <div class="lang-toggle self-end" id="lang-toggle-btn" onclick="toggleLanguage()">
-                    <div class="lang-toggle-handle" id="lang-handle"></div>
-                    <span class="lang-option">తెలుగు</span>
-                    <span class="lang-option">हिंदी</span>
+                <div class="flex flex-col items-end gap-1">
+                    <!-- Language Toggle Pill -->
+                    <div class="lang-toggle self-end" id="lang-toggle-btn" onclick="toggleLanguage()">
+                        <div class="lang-toggle-handle" id="lang-handle"></div>
+                        <span class="lang-option">తెలుగు</span>
+                        <span class="lang-option">हिंदी</span>
+                    </div>
+                    <!-- English Rescue Button -->
+                    <button onclick="localStorage.removeItem('astitva_lang'); currentLang='en'; document.getElementById('lang-toggle-btn').classList.remove('toggle-hi'); applyLanguage();" 
+                            class="text-[9px] text-gray-400 hover:text-white hover:underline transition-all tracking-wide">
+                        Click here to Reset to English
+                    </button>
                 </div>
             </div>
         </div>
