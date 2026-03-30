@@ -439,6 +439,13 @@
 
             <button class="mt-8 text-gray-500 text-xs font-semibold animate-pulse" data-i18n="tap-start"
                 onclick="switchView(1)">Tap to Start / ప్రారంభించడానికి నొక్కండి / शुरू करने के लिए टैप करें</button>
+
+            <!-- Language Reset Button - always visible on splash -->
+            <button onclick="localStorage.removeItem('astitva_lang'); localStorage.removeItem('astitva_user'); currentLang='en'; document.getElementById('lang-toggle-btn').classList.remove('toggle-hi'); applyLanguage();"
+                class="mt-4 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-gray-400 text-[11px] font-semibold hover:bg-white/10 hover:text-white transition-all flex items-center gap-2 mx-auto">
+                <span class="material-symbols-outlined text-[14px]">language</span>
+                Reset Language / భాషను రీసెట్ చేయండి / भाषा रीसेट करें
+            </button>
         </div>
 
         <!-- VIEW 1: LANGUAGE -->
