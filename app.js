@@ -685,12 +685,13 @@ function renderRecommendedSchemes(ids, speech, phonetic) {
     appState.matchedScheme = schemesToRender[0]; // Set default for flow continuation
 
     // Render Gemini Array dynamically
-    schemesToRender.forEach(scheme => {
+    schemesToRender.forEach((scheme, index) => {
         const title = currentLang === 'te' ? scheme.name_te : (currentLang === 'hi' ? scheme.name_hi : scheme.name);
         const benefit = currentLang === 'te' ? scheme.benefit_te : (currentLang === 'hi' ? scheme.benefit_hi : scheme.benefit);
         
         const card = document.createElement('div');
-        card.className = "bg-white/5 rounded-3xl p-5 border border-white/10 relative overflow-hidden group mb-2 shadow-lg";
+        card.className = "stagger-card bg-white/5 rounded-3xl p-5 border border-white/10 relative overflow-hidden group mb-2 shadow-lg";
+        card.style.animationDelay = `${index * 0.15}s`;
         card.innerHTML = `
             <div class="absolute inset-0 bg-brand-orange/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div class="flex items-start gap-4 mb-4 relative z-10">
@@ -1164,4 +1165,23 @@ function getMissingDocInstructions(docName, lang) {
     if (lName.includes("income")) return lang === 'te' ? "ఆదాయ ధృవీకరణ పత్రం కోసం మీసేవ కేంద్రానికి వెళ్ళండి." : "आय प्रमाण पत्र के लिए मीसेवा केंद्र जाएं।";
     if (lName.includes("caste")) return lang === 'te' ? "కుల ధృవీకరణ కోసం తహసీల్దార్ కార్యాలయానికి వెళ్ళండి." : "जाति प्रमाण के लिए तहसीलदार कार्यालय जाएं।";
     return lang === 'te' ? "ఈ పత్రం కోసం మీసేవ సెంటర్ ని సంప్రదించండి." : "इस दस्तावेज़ के लिए मीसेवा केंद्र पर जाएँ।";
+}
+
+function showHelpers() {
+    switchView(6);
+    
+    // Voice Feedback transitioning from View 5 to View 6
+    let message = currentLang === 'te' 
+      ? "మీకు ఇంకేమైనా సహాయం కావాలంటే దయచేసి ఈ స్థానిక సహాయకులను సంప్రదించండి." 
+      : (currentLang === 'hi' 
+         ? "यदि आपको किसी और सहायता की आवश्यकता है, तो कृपया इन स्थानीय सहायकों से संपर्क करें।" 
+         : "If you need any further assistance, please contact these local helpers.");
+         
+    let phonetic = currentLang === 'te' 
+      ? "Meeku inka emaina sahayam kavalante dayachesi ee sthanika sahayakulanu sampradinchandi." 
+      : (currentLang === 'hi' 
+         ? "Yadi aapko kisi aur sahayata ki aavashyakta hai, toh kripaya in sthaniya sahayakon se sampark karein." 
+         : null);
+         
+    speak(message, null, null, phonetic);
 }

@@ -226,6 +226,16 @@
         .nav-logo-transition {
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        /* Premium Stagger Animations */
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .stagger-card {
+            opacity: 0;
+            animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
     </style>
 </head>
 
@@ -500,8 +510,7 @@
             <div class="flex justify-between items-center w-full mb-8">
                 <div>
                     <h2 class="text-3xl font-black text-white pl-2" id="dash-greeting">Hello!</h2>
-                    <p class="text-brand-orange text-sm font-bold tracking-widest pl-2 uppercase">Astitva AI Assistant
-                    </p>
+                    <p class="text-brand-orange text-sm font-bold tracking-widest pl-2 uppercase">Disha (Your Astitva Guide)</p>
                 </div>
 
                 <div class="flex gap-2">
@@ -529,7 +538,7 @@
                     <span class="material-symbols-outlined text-white" style="font-size: 56px">mic</span>
                 </div>
 
-                <h3 class="text-2xl font-black text-white relative z-10 mb-2" data-i18n="ask-ai">Ask AI Expert</h3>
+                <h3 class="text-2xl font-black text-white relative z-10 mb-2" data-i18n="ask-ai">Ask Disha</h3>
                 <p class="text-blue-200 font-medium text-center relative z-10 text-sm">మాట్లాడటానికి నొక్కండి / बात करने
                     के लिए टैप करें</p>
 
@@ -570,7 +579,7 @@
                 / क्या आपके पास आधार कार्ड है?</p>
 
             <div class="flex flex-col gap-6 w-full max-w-sm">
-                <button onclick="switchView(6)" id="btn-yes"
+                <button onclick="showHelpers()" id="btn-yes"
                     class="glass-panel rounded-[2rem] p-8 flex flex-col items-center justify-center border border-emerald-500/30 hover:bg-white/10 transition-colors relative overflow-hidden group">
                     <div class="absolute inset-0 bg-emerald-500/10 group-hover:bg-emerald-500/20 transition-colors">
                     </div>
@@ -582,7 +591,7 @@
                     <p class="text-gray-300 font-semibold mt-2 z-10" data-i18n="yes-sub">అవును / हाँ</p>
                 </button>
 
-                <button onclick="switchView(6)" id="btn-no"
+                <button onclick="showHelpers()" id="btn-no"
                     class="glass-panel rounded-[2rem] p-8 flex flex-col items-center justify-center border border-brand-red/30 hover:bg-white/10 transition-colors relative overflow-hidden group">
                     <div class="absolute inset-0 bg-brand-red/10 group-hover:bg-brand-red/20 transition-colors"></div>
                     <div
@@ -608,15 +617,15 @@
                         <div
                             class="w-full h-full rounded-full bg-navy flex items-center justify-center overflow-hidden border-2 border-navy">
                             <!-- Placeholder avatar -->
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Priya&backgroundColor=121520"
-                                alt="Priya" class="w-full h-full object-cover" />
+                            <img src="https://api.dicebear.com/7.x/initials/svg?seed=LH&backgroundColor=f97316"
+                                alt="Helpers" class="w-full h-full object-cover" />
                         </div>
                         <div
                             class="absolute -bottom-1 right-2 w-5 h-5 bg-emerald-500 rounded-full border-2 border-navy flex items-center justify-center">
                         </div>
                     </div>
                     <div class="flex flex-col">
-                        <h3 class="text-xl font-bold text-white leading-tight">Priya Sharma</h3>
+                        <h3 class="text-xl font-bold text-white leading-tight">Local Helpers</h3>
                         <p class="text-brand-orange text-sm font-semibold mb-1" data-i18n="expert-role">Rural Guardian
                         </p>
                         <div class="flex items-center gap-1 mb-2">
@@ -630,57 +639,6 @@
                     </div>
                 </div>
 
-                <!-- Chat Area -->
-                <div class="glass-panel rounded-3xl p-4 flex flex-col h-[300px]">
-                    <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
-                        <h4 class="font-bold text-white flex items-center gap-2">
-                            <span class="material-symbols-outlined text-brand-orange">chat</span>
-                            <span data-i18n="chat-title">Chat with Priya</span>
-                        </h4>
-                    </div>
-
-                    <div class="flex-1 overflow-y-auto pr-2 space-y-4 flex flex-col">
-                        <!-- Bot Msg -->
-                        <div class="flex gap-2 max-w-[85%]">
-                            <div
-                                class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
-                                <span class="material-symbols-outlined text-brand-orange text-sm">support_agent</span>
-                            </div>
-                            <div class="glass-btn rounded-2xl rounded-tl-sm px-4 py-3">
-                                <p class="text-xs text-gray-200 leading-relaxed" data-i18n="chat-msg-1">Namaste! I'm
-                                    Priya, your local scheme expert. How can I help you today?</p>
-                            </div>
-                        </div>
-                        <!-- User Msg -->
-                        <div class="flex gap-2 max-w-[85%] self-end flex-row-reverse">
-                            <div
-                                class="bg-gradient-to-br from-brand-orange to-brand-red rounded-2xl rounded-tr-sm px-4 py-3 shadow-[0_0_15px_rgba(251,146,60,0.3)]">
-                                <p class="text-xs text-white leading-relaxed font-medium" data-i18n="chat-msg-2">I need
-                                    help applying for Aarogyasri</p>
-                            </div>
-                        </div>
-                        <!-- Bot Msg -->
-                        <div class="flex gap-2 max-w-[85%]">
-                            <div
-                                class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
-                                <span class="material-symbols-outlined text-brand-orange text-sm">support_agent</span>
-                            </div>
-                            <div class="glass-btn rounded-2xl rounded-tl-sm px-4 py-3">
-                                <p class="text-xs text-gray-200 leading-relaxed" data-i18n="chat-msg-3">I can guide you
-                                    through the entire process. Do you have your Aadhaar and ration card ready?</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 relative">
-                        <input type="text" placeholder="Type your message..."
-                            class="w-full bg-white/5 border border-white/10 rounded-full py-3 px-5 text-sm outline-none focus:border-brand-orange/50 transition-colors text-white">
-                        <button
-                            class="absolute right-1.5 top-1.5 w-9 h-9 rounded-full bg-gradient-to-br from-brand-orange to-brand-red flex items-center justify-center shadow-md">
-                            <span class="material-symbols-outlined text-white text-[18px] ml-0.5">send</span>
-                        </button>
-                    </div>
-                </div>
 
                 <!-- Massive Action Buttons -->
                 <div class="flex flex-col gap-3 mt-2">
@@ -688,14 +646,14 @@
                         class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 flex items-center justify-center gap-3 shadow-[0_4px_20px_rgba(16,185,129,0.4)] active:scale-[0.98] transition-all"
                         onclick="window.location.href='tel:104'">
                         <span class="material-symbols-outlined text-white">call</span>
-                        <span class="font-bold text-white text-lg tracking-wide" data-i18n="call-expert">Call Priya /
-                            ప్రియ కి కాల్ చేయండి / प्रिया को कॉल करें</span>
+                        <span class="font-bold text-white text-lg tracking-wide" data-i18n="call-expert">Call Helpers /
+                            సహాయకులకు కాల్ చేయండి / सहायकों को कॉल करें</span>
                     </button>
                     <button
                         class="w-full py-4 rounded-2xl glass-btn flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
                         onclick="window.open('https://wa.me/91104', '_blank')">
                         <span class="material-symbols-outlined text-green-400">forum</span>
-                        <span class="font-bold text-white text-lg tracking-wide" data-i18n="wa-expert">WhatsApp Priya /
+                        <span class="font-bold text-white text-lg tracking-wide" data-i18n="wa-expert">WhatsApp Helpers /
                             వాట్సాప్ సందేశం / व्हाट्सएप संदेश</span>
                     </button>
                 </div>
@@ -732,12 +690,12 @@
                 'btn-check-elig': 'Check Eligibility', 'btn-get-help': 'Get Help', 'btn-back': '← Back',
                 'doc-check-title': 'Do you have Aadhaar Card?', 'doc-check-sub': 'Need it to process application',
                 'yes': 'YES', 'yes-sub': 'I have it', 'no': 'NO', 'no-sub': 'I don\'t have it',
-                'expert-title': 'Meet Your Local Rural Guardian', 'expert-role': 'Rural Guardian', 'view-profile': 'View Profile',
-                'chat-title': 'Chat with Priya',
-                'chat-msg-1': "Namaste! I'm Priya, your local scheme expert. How can I help you today?",
+                'expert-title': 'Meet Your Local Helpers', 'expert-role': 'Local Guides', 'view-profile': 'View Profiles',
+                'chat-title': 'Chat with Local Helpers',
+                'chat-msg-1': "Namaste! We are your local helpers. How can we assist you today?",
                 'chat-msg-2': "I need help applying for Aarogyasri",
-                'chat-msg-3': "I can guide you through the entire process. Do you have your Aadhaar and ration card ready?",
-                'call-expert': 'Call Priya', 'wa-expert': 'WhatsApp Priya'
+                'chat-msg-3': "We can guide you through the entire process. Do you have your Aadhaar and ration card ready?",
+                'call-expert': 'Call Helpers', 'wa-expert': 'WhatsApp Helpers'
             },
             'te': {
                 'nav-home': 'హోమ్', 'nav-services': 'సేవలు', 'nav-about': 'గురించి', 'nav-contact': 'సంప్రదించండి',
@@ -762,12 +720,12 @@
                 'btn-check-elig': 'అర్హత తనిఖీ చేయండి', 'btn-get-help': 'సహాయం పొందండి', 'btn-back': '← వెనుకకు',
                 'doc-check-title': 'మీ దగ్గర ఆధార్ కార్డు ఉందా?', 'doc-check-sub': 'దరఖాస్తు చేయడానికి ఇది అవసరం',
                 'yes': 'అవును', 'yes-sub': 'ఉంది', 'no': 'లేదు', 'no-sub': 'లేదు',
-                'expert-title': 'మీ స్థానిక గార్డియన్‌ను కలవండి', 'expert-role': 'రూరల్ గార్డియన్', 'view-profile': 'ప్రొఫైల్ చూడండి',
-                'chat-title': 'ప్రియ తో చాట్ చేయండి',
-                'chat-msg-1': "నమస్తే! నేను ప్రియ, మీ స్థానిక పథకాల సహాయకురాలిని. నేడు నేను మీకు ఎలా సహాయం చేయగలను?",
+                'expert-title': 'మీ స్థానిక సహాయకులను కలవండి', 'expert-role': 'స్థానిక మార్గదర్శకులు', 'view-profile': 'ప్రొఫైల్స్ చూడండి',
+                'chat-title': 'సహాయకులతో చాట్ చేయండి',
+                'chat-msg-1': "నమస్తే! మేము మీ స్థానిక సహాయకులము. నెడు మేము మీకు ఎలా సహాయం చేయగలము?",
                 'chat-msg-2': "ఆరోగ్యశ్రీ దరఖాస్తు చేసుకోవడానికి నాకు సహాయం కావాలి",
-                'chat-msg-3': "నేను ఈ ప్రక్రియలో మీకు మార్గనిర్దేశం చేయగలను. మీ వద్ద ఆధార్ మరియు రేషన్ కార్డు ఉన్నాయా?",
-                'call-expert': 'ప్రియ కి కాల్ చేయండి', 'wa-expert': 'వాట్సాప్ సందేశం'
+                'chat-msg-3': "మేము ఈ ప్రక్రియలో మీకు మార్గనిర్దేశం చేయగలము. మీ వద్ద ఆధార్ మరియు రేషన్ కార్డు ఉన్నాయా?",
+                'call-expert': 'సహాయకులకు కాల్ చేయండి', 'wa-expert': 'వాట్సాప్ సందేశం'
             },
             'hi': {
                 'nav-home': 'होम', 'nav-services': 'सेवाएं', 'nav-about': 'बारे में', 'nav-contact': 'संपर्क करें',
@@ -792,12 +750,12 @@
                 'btn-check-elig': 'पात्रता जांचें', 'btn-get-help': 'मदद प्राप्त करें', 'btn-back': '← वापस',
                 'doc-check-title': 'क्या आपके पास आधार कार्ड है?', 'doc-check-sub': 'आवेदन की प्रक्रिया के लिए जरूरी है',
                 'yes': 'हाँ', 'yes-sub': 'मेरे पास है', 'no': 'नहीं', 'no-sub': 'मेरे पास नहीं है',
-                'expert-title': 'अपने स्थानीय रक्षक से मिलें', 'expert-role': 'ग्रामीण रक्षक', 'view-profile': 'प्रोफाइल देखें',
-                'chat-title': 'प्रिया के साथ चैट करें',
-                'chat-msg-1': "नमस्ते! मैं प्रिया हूँ, आपकी स्थानीय योजना विशेषज्ञ। आज मैं आपकी कैसे मदद कर सकती हूँ?",
+                'expert-title': 'अपने स्थानीय सहायकों से मिलें', 'expert-role': 'स्थानीय मार्गदर्शक', 'view-profile': 'प्रोफाइल देखें',
+                'chat-title': 'स्थानीय सहायकों से चैट करें',
+                'chat-msg-1': "नमस्ते! हम आपके स्थानीय सहायक हैं। आज हम आपकी कैसे मदद कर सकते हैं?",
                 'chat-msg-2': "मुझे आरोग्यश्री के लिए आवेदन करने में मदद चाहिए",
-                'chat-msg-3': "मैं पूरी प्रक्रिया में आपका मार्गदर्शन कर सकती हूँ। क्या आपके पास अपना आधार और राशन कार्ड तैयार है?",
-                'call-expert': 'प्रिया को कॉल करें', 'wa-expert': 'व्हाट्सएप संदेश'
+                'chat-msg-3': "हम पूरी प्रक्रिया में आपका मार्गदर्शन कर सकते हैं। क्या आपके पास अपना आधार और राशन कार्ड तैयार है?",
+                'call-expert': 'सहायकों को कॉल करें', 'wa-expert': 'व्हाट्सएप संदेश'
             }
         };
 
