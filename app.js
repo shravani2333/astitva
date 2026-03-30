@@ -1016,7 +1016,12 @@ function showDocumentModal(docName) {
     `;
 
     document.body.appendChild(modal);
-    speak(question);
+    
+    // Speak the question with phonetic fallback for devices without Indian voices
+    const questionPhonetic = currentLang === 'te'
+        ? `Mee daggar ${docName} undaa?`
+        : `Kya aapke paas ${docName} hai?`;
+    speak(question, null, null, questionPhonetic);
 
     document.getElementById('doc-yes-btn').onclick = () => {
       modal.remove();
@@ -1086,7 +1091,13 @@ function showMissingDocHelp(docName) {
     `;
 
     document.body.appendChild(helpModal);
-    speak(helpText + ". " + howToGetDoc);
+    
+    // Speak both help text and how-to instructions with phonetic fallback
+    const fullMessage = helpText + ". " + howToGetDoc;
+    const phoneticMessage = currentLang === 'te'
+        ? `Mee document ledu. Meeseva kendra ki vellandi sahayam kosam.`
+        : `Aapke paas document nahin hai. Nearest Meeseva kendra mein jaayein.`;
+    speak(fullMessage, null, null, phoneticMessage);
 }
 
 // ----------------------------------------------------------------------------
@@ -1095,61 +1106,48 @@ function showMissingDocHelp(docName) {
 
 function getDocumentCardHTML(docName) {
     const lName = docName.toLowerCase();
+    const imgStyle = `class="w-full h-auto object-cover rounded-2xl shadow-2xl border-2 border-white/10"`;
 
     if (lName.includes("aadhaar") || lName.includes("aadhar")) {
-        return `
-        <div class="w-full max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl relative border-[3px] border-white/10" style="animation: pulse 2s infinite;">
-            <img src="./assets/aadhaar_sample.png" alt="Aadhaar Card Sample" class="w-full h-auto object-cover rounded-2xl" onerror="this.src='https://via.placeholder.com/600x400/283593/ffffff?text=Aadhaar+Sample'" />
+        return `<div class="w-full max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl">
+            <img src="./assets/aadhaar_sample.png" alt="Aadhaar Card" ${imgStyle}
+                onerror="this.src='https://via.placeholder.com/600x400/283593/ffffff?text=Aadhaar+Card'" />
         </div>`;
     }
-    
+
     if (lName.includes("ration")) {
-        return `
-        <div class="w-full max-w-xs mx-auto rounded-2xl overflow-hidden shadow-2xl"
-             style="background: linear-gradient(135deg, #1b5e20, #2e7d32, #388e3c);">
-          <div class="p-4">
-            <div class="text-center mb-3">
-              <div class="text-white font-black text-sm">తెలంగాణ ప్రభుత్వం</div>
-              <div class="text-green-200 text-[10px]">TELANGANA GOVERNMENT</div>
-              <div class="text-yellow-300 font-bold text-sm mt-1">రేషన్ కార్డు | RATION CARD</div>
-            </div>
-            <div class="bg-white/10 rounded-xl p-3">
-              <div class="flex justify-between mb-2">
-                <span class="text-green-200 text-[10px]">Card Type:</span>
-                <span class="text-white text-[10px] font-bold">WHITE (BPL)</span>
-              </div>
-              <div class="h-2 bg-white/30 rounded mb-2 w-3/4"></div>
-              <div class="h-2 bg-white/20 rounded mb-2 w-1/2"></div>
-            </div>
-          </div>
+        return `<div class="w-full max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl">
+            <img src="./assets/ration_card_sample.png" alt="Ration Card" ${imgStyle}
+                onerror="this.src='https://via.placeholder.com/600x400/1b5e20/ffffff?text=Ration+Card'" />
         </div>`;
     }
 
     if (lName.includes("income")) {
-        return `
-        <div class="w-full max-w-xs mx-auto rounded-2xl overflow-hidden shadow-2xl"
-             style="background: linear-gradient(135deg, #b71c1c, #c62828, #d32f2f);">
-          <div class="p-4">
-            <div class="text-center mb-3">
-              <div class="text-white font-black text-sm">ఆదాయ ధృవీకరణ పత్రం</div>
-              <div class="text-red-200 text-[10px]">INCOME CERTIFICATE</div>
-            </div>
-            <div class="bg-white/10 rounded-xl p-3">
-              <div class="h-2 bg-white/40 rounded mb-2 w-full"></div>
-              <div class="h-2 bg-white/30 rounded mb-2 w-3/4"></div>
-              <div class="mt-2 text-center">
-                <div class="text-yellow-300 text-xs font-bold">Annual Income: ₹ ________</div>
-              </div>
-            </div>
-          </div>
+        return `<div class="w-full max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl">
+            <img src="./assets/income_certificate_sample.png" alt="Income Certificate" ${imgStyle}
+                onerror="this.src='https://via.placeholder.com/600x400/b71c1c/ffffff?text=Income+Certificate'" />
         </div>`;
     }
 
-    // Default (e.g. Bank Passbook, Photos, non-specific documents)
+    if (lName.includes("caste") || lName.includes("community")) {
+        return `<div class="w-full max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl">
+            <img src="./assets/caste_certificate_sample.png" alt="Caste Certificate" ${imgStyle}
+                onerror="this.src='https://via.placeholder.com/600x400/4a148c/ffffff?text=Caste+Certificate'" />
+        </div>`;
+    }
+
+    if (lName.includes("bank") || lName.includes("passbook") || lName.includes("account")) {
+        return `<div class="w-full max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl">
+            <img src="./assets/bank_passbook_sample.png" alt="Bank Passbook" ${imgStyle}
+                onerror="this.src='https://via.placeholder.com/600x400/0d47a1/ffffff?text=Bank+Passbook'" />
+        </div>`;
+    }
+
+    // Default fallback for any other document
     return `
     <div class="w-full max-w-sm mx-auto bg-blue-900/20 border-2 border-dashed border-blue-500/50 rounded-3xl p-6 text-center shadow-lg">
       <div class="w-16 h-16 rounded-full bg-blue-500/20 text-blue-400 mx-auto flex items-center justify-center mb-4">
-        <span class="material-symbols-outlined text-3xl">info</span>
+        <span class="material-symbols-outlined text-3xl">description</span>
       </div>
       <h3 class="text-white font-black text-xl mb-2">${docName}</h3>
       <p class="text-gray-300 text-sm font-medium">
@@ -1157,6 +1155,7 @@ function getDocumentCardHTML(docName) {
       </p>
     </div>`;
 }
+
 
 function getMissingDocInstructions(docName, lang) {
     const lName = docName.toLowerCase();
