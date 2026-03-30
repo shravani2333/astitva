@@ -173,8 +173,9 @@ function onViewChanged(viewId) {
         speak(speech, null, null, phonetic);
     } else if (viewId === 6) {
         speak(currentLang === 'te' 
-            ? "నమస్తే! నేను ప్రియ, మీ స్థానిక పథకాల సహాయకురాలిని. నేడు నేను మీకు ఎలా సహాయం చేయగలను?" 
-            : "नमस्ते! मैं प्रिया हूँ, आपकी स्थानीय योजना विशेषज्ञ। आज मैं आपकी कैसे मदद कर सकती हूँ?", null, null, currentLang === 'te' ? "Namaste! Nenu Priya. Nedu nenu meku elaa sahaayam cheyagalanu?" : "Namaste! Main Priya hoon. Aaj main aapki kaise madad kar sakti hoon?");
+            ? "నమస్తే! మేము మీ స్థానిక సహాయకులము. మీకు ఇంకేమైనా సహాయం కావాలంటే దయచేసి మమ్మల్ని సంప్రదించండి." 
+            : "नमस्ते! हम आपके स्थानीय सहायक हैं। यदि आपको किसी और सहायता की आवश्यकता है, तो हमसे संपर्क करें।", null, null, 
+            currentLang === 'te' ? "Namaste! Memu mee sthanika sahayakulamu. Meeku sahayam kaavaalanteమమ్మల్ని sampradinchandi." : "Namaste! Hum aapke sthaniya sahayak hain. Kisi sahayata ke liye humse sampark karein.");
     }
 }
 
@@ -252,23 +253,27 @@ function listen(callback) {
     else if(currentLang === 'hi') recognition.lang = 'hi-IN';
     else recognition.lang = 'en-IN';
     
+    const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
     recognition.continuous = false;
-    recognition.interimResults = true;
+    // On mobile, interimResults can cause the Android Chrome hang bug where partial results
+    // never fire isFinal=true. Disable it on mobile for reliability.
+    recognition.interimResults = !isMobile;
 
     // Track globally so cleanSlate() can abort this from outside
     _activeRecognition = recognition;
 
-    // FIX 2: 7-second Watchdog Timer — kills a hung mic and fires empty callback
+    // Extended to 12s on mobile to give it time to warm up the mic permission
+    const watchdogMs = /Android|iPhone|iPad/i.test(navigator.userAgent) ? 12000 : 7000;
     let watchdogTimer = setTimeout(() => {
         if (!finished) {
-            console.warn("[Watchdog] Mic hung for 7s. Force-stopping.");
+            console.warn("[Watchdog] Mic hung for " + watchdogMs/1000 + "s. Force-stopping.");
             finished = true;
             _isListening = false;
             try { recognition.stop(); } catch(e) {}
             _activeRecognition = null;
-            callback("");
+            callback(lastInterim || "");
         }
-    }, 7000);
+    }, watchdogMs);
 
     try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -590,7 +595,7 @@ function startGeminiVoiceSearch() {
     
     // UI Feedback
     if(pulse) pulse.classList.remove('hidden');
-    if(status) status.innerText = currentLang === 'te' ? "వింటున్నాను..." : "सुन रहा हूँ...";
+    if(status) status.innerText = currentLang === 'te' ? "వింటున్నాను... మాట్లాడండి" : (currentLang === 'hi' ? "सुन रहा हूँ... बोलिए" : "Listening... speak now");
     if(btn) btn.classList.add('border-green-500');
 
     listen(async (transcript) => {
