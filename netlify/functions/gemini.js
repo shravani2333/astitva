@@ -84,13 +84,23 @@ Required Schema:
         if(!rawReply) throw new Error("Empty gemini response");
         
         // Clean any markdown formatting Gemini might have wrapped the JSON in
-        const cleanReply = rawReply.replace(/```json/gi, '').replace(/```/g, '').trim();
+        let cleanReply = rawReply.replace(/```json/gi, '').replace(/```/g, '').trim();
+        
+        let parsedReply;
+        try {
+            parsedReply = JSON.parse(cleanReply);
+        } catch(parseErr) {
+            // LLMs often mistakenly inject literal unescaped newlines inside JSON strings when asked to format text.
+            // Sanitize raw control characters to valid escaped characters.
+            let sanitized = cleanReply.replace(/(?<!\\)\n/g, '\\n').replace(/\r/g, '');
+            parsedReply = JSON.parse(sanitized);
+        }
         
         // Return exactly what Gemini formatted as JSON natively
         return {
             statusCode: 200,
             headers: { "Content-Type": "application/json" },
-            body: cleanReply
+            body: JSON.stringify(parsedReply)
         };
     } catch (error) {
         return { statusCode: 500, body: JSON.stringify({ error: "Server error: " + error.message }) };
