@@ -83,11 +83,14 @@ Required Schema:
         const rawReply = data.candidates?.[0]?.content?.parts?.[0]?.text;
         if(!rawReply) throw new Error("Empty gemini response");
         
+        // Clean any markdown formatting Gemini might have wrapped the JSON in
+        const cleanReply = rawReply.replace(/```json/gi, '').replace(/```/g, '').trim();
+        
         // Return exactly what Gemini formatted as JSON natively
         return {
             statusCode: 200,
             headers: { "Content-Type": "application/json" },
-            body: rawReply
+            body: cleanReply
         };
     } catch (error) {
         return { statusCode: 500, body: JSON.stringify({ error: "Server error: " + error.message }) };
