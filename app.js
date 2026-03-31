@@ -140,8 +140,6 @@ function warmupMic() {
 
 function onViewChanged(viewId) {
     if (viewId === 1) {
-        requestLocationAccess();
-        warmupMic();
 
         // Safe robust TTS greeting — tracked so cleanSlate() can kill them if user navigates away
         _pendingTimers.push(setTimeout(() => {
@@ -799,9 +797,10 @@ User Profile: Name: ${pName}, Age: ${pAge}, Occupation: ${pOcc}.
 Database of schemes: ${JSON.stringify((db || []).slice(0, 20))}.
 
 TASK: Match problem against EXACT schemes from DB. Do not invent. Speak strictly in ${uLang}. Order by highest priority.
+CRITICAL TTS RULE: Use very short, simple sentences separated by periods. Do NOT use long run-on sentences.
 Structure speech: 1) Give a detailed explanation of the top scheme and its exact benefits. 2) Provide descriptions of other matching schemes if applicable. 3) Ask which specific scheme they want help with.
 Return ONLY valid JSON:
-{ "speech": "Highly detailed, empathetic conversational answer in ${uLang} script.", "speech_phonetic": "Same detailed structured answer in Latin script", "scheme_ids": ["ID1"] }`;
+{ "speech": "Highly detailed, empathetic conversational answer in ${uLang} script composed of very short sentences ending with proper punctuation.", "speech_phonetic": "Same detailed structured answer in Latin script", "scheme_ids": ["ID1"] }`;
         contentText = "Query: " + (query || "");
     } else {
         sysInstruction = `You are Disha, a helpful local rural scheme expert. Be extremely empathetic and concise. No markdown.
@@ -934,8 +933,8 @@ function speak(textNative, onEndCallback, forceLang = null, textPhonetic = null)
         }
 
         // Android Chrome cuts off speech strictly at 15 seconds.
-        // FIX: Split long speech into sentence chunks and queue them sequentially, including commas and newlines.
-        const chunks = finalSpeakingText.match(/[^.,!?।\n]+[.,!?।\n]*/g) || [finalSpeakingText];
+        // FIX: Split long speech strictly by sentence-ending punctuation so TTS pacing is natural but never exceeds 10s.
+        const chunks = finalSpeakingText.match(/[^.!?।\n]+[.!?।\n]*/g) || [finalSpeakingText];
         let currentChunkIndex = 0;
 
         // FIX 1B: Failsafe timeout — if browser drops the onend event, proceed anyway

@@ -30,16 +30,17 @@ Database of schemes: ${JSON.stringify(db || [])}.
 TASK:
 1. Match their problem against EXACT schemes from the database ONLY. Do NOT invent schemes.
 2. Select the best 1-2 matching scheme IDs, ordered by highest priority first.
-3. Structure your speech as follows:
+3. CRITICAL TTS RULE: Use very short, simple sentences separated by periods. Do NOT use long run-on sentences. 
+4. Structure your speech as follows:
    - First, present the highest priority scheme: mention it is the top scheme for them and explain its exact benefit from the database.
    - Second, briefly describe any other matching schemes.
    - Finally, end by asking which scheme they want to proceed with (e.g. 'వీటిలో మీకు ఏ పథకం గురించి కావాలి?' in Telugu or 'आपको इनमें से कौन सी योजना चाहिए?' in Hindi).
-4. Speak strictly in the requested language (${uLang}).
+5. Speak strictly in the requested language (${uLang}).
 
 CRITICAL: YOU MUST RETURN RAW JSON ONLY.
 Required Schema:
 {
-  "speech": "Your empathetic translated response in native script",
+  "speech": "Your empathetic translated response in native script composed of very short sentences separated by periods.",
   "speech_phonetic": "The exact same response transliterated into Latin/English (e.g. 'Nenu meku sahayam chestanu'). If english, keep empty.",
   "scheme_ids": ["ID1", "ID2"]
 }`;
