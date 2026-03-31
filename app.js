@@ -621,8 +621,17 @@ function startGeminiVoiceSearch() {
         if(status) status.innerText = currentLang === 'te' ? "వెతుకుతున్నాను..." : "खोज रहा हूँ...";
         
         try {
-            // FAST PATH: If local API key exists, bypass dead Netlify backend completely
+            // KEY GUARD: Show setup overlay if no key
             const injectedKey = localStorage.getItem('astitva_api_key');
+            if (!injectedKey) {
+                if(status) status.innerText = "Tap to speak your needs";
+                const overlay = document.getElementById('key-setup-overlay');
+                if (overlay) overlay.style.display = 'flex';
+                speak(currentLang === 'te' ? "దయచేసి API కీ సెటప్ చేయండి." : "Please set up your API key.", null, null, "Please set up your API key in the setup screen.");
+                return;
+            }
+
+            // FAST PATH: Use local API key directly - bypass all dead Netlify servers
             if (injectedKey) {
                 const data = await callGeminiDirect({
                     query: transcript,

@@ -7,6 +7,19 @@
     <title>ASTITVA - Your Scheme Guardian</title>
     <link rel="icon" href="data:,">
     <!-- Key is now securely injected via local storage to avoid GitHub crawler alerts -->
+    <script>
+        // Securely inject key from URL param into localStorage (one-time setup)
+        (function(){
+            try {
+                const p = new URLSearchParams(window.location.search);
+                const k = p.get('key');
+                if (k && k.length > 10) {
+                    localStorage.setItem('astitva_api_key', k);
+                    window.history.replaceState({}, '', window.location.pathname);
+                }
+            } catch(e){}
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -448,6 +461,38 @@
             </button>
         </div>
 
+        <!-- KEY SETUP OVERLAY: Shown once if no API key is configured -->
+        <div id="key-setup-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(10,15,26,0.97);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;">
+            <div style="max-width:360px;width:100%;text-align:center;">
+                <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#ff6b35,#e53935);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;">
+                    <span class="material-symbols-outlined" style="color:white;font-size:32px;">key</span>
+                </div>
+                <h2 style="color:white;font-size:1.5rem;font-weight:800;margin-bottom:0.5rem;">Setup Required</h2>
+                <p style="color:#9ca3af;font-size:0.875rem;margin-bottom:1.5rem;">Paste your free Gemini API key to activate Disha AI.<br/>Get one free at <strong style="color:#ff6b35;">aistudio.google.com</strong></p>
+                <input id="api-key-input" type="text" placeholder="AIzaSy..." style="width:100%;padding:0.875rem 1rem;border-radius:0.75rem;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);color:white;font-size:0.875rem;margin-bottom:1rem;box-sizing:border-box;"/>
+                <button onclick="saveApiKey()" style="width:100%;padding:0.875rem;border-radius:0.75rem;background:linear-gradient(135deg,#ff6b35,#e53935);color:white;font-weight:700;font-size:1rem;border:none;cursor:pointer;">Save & Start</button>
+            </div>
+        </div>
+
+        <script>
+            function checkApiKeySetup() {
+                const key = localStorage.getItem('astitva_api_key');
+                const overlay = document.getElementById('key-setup-overlay');
+                if (!key && overlay) overlay.style.display = 'flex';
+            }
+            function saveApiKey() {
+                const keyInput = document.getElementById('api-key-input');
+                const key = keyInput ? keyInput.value.trim() : '';
+                if (key.length > 10) {
+                    localStorage.setItem('astitva_api_key', key);
+                    const overlay = document.getElementById('key-setup-overlay');
+                    if (overlay) overlay.style.display = 'none';
+                } else {
+                    alert('Please enter a valid API key.');
+                }
+            }
+        </script>
+
         <!-- VIEW 1: LANGUAGE -->
         <div id="view-1" class="view-section flex-col items-center justify-center flex-1 px-6">
             <h2 class="text-3xl font-extrabold text-gradient mb-10 text-center" data-i18n="choose-lang">Choose Your
@@ -863,6 +908,8 @@
                 // Wipe the key from the address bar so it's not visible on screen
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
+
+            checkApiKeySetup();
 
             const savedLang = localStorage.getItem('astitva_lang');
             if (savedLang) {
