@@ -622,8 +622,8 @@ function startGeminiVoiceSearch() {
         
         try {
             // FAST PATH: If local API key exists, bypass dead Netlify backend completely
-            const keyMeta = document.querySelector('meta[name="gemini-key"]');
-            if (keyMeta && keyMeta.getAttribute('content')) {
+            const injectedKey = localStorage.getItem('astitva_api_key');
+            if (injectedKey) {
                 const data = await callGeminiDirect({
                     query: transcript,
                     lang: currentLang,
@@ -766,8 +766,8 @@ async function handleExpertChat(query) {
     
     try {
         // FAST PATH: If local API key exists, bypass dead Netlify backend
-        const keyMeta = document.querySelector('meta[name="gemini-key"]');
-        if (keyMeta && keyMeta.getAttribute('content')) {
+        const injectedKey = localStorage.getItem('astitva_api_key');
+        if (injectedKey) {
             const data = await callGeminiDirect({
                 messages: reqCtx,
                 lang: currentLang,
@@ -808,12 +808,11 @@ async function handleExpertChat(query) {
 }
 
 // Direct browser-side Gemini API call (fallback when Netlify is not available)
-// NOTE: Only works locally if you add <meta name="gemini-key" content="YOUR_KEY"> to index.html
+// NOTE: Only works locally if you pass ?key=YOUR_KEY in the URL to store it in localStorage
 // On Netlify this function is never reached because the serverless function handles it.
 async function callGeminiDirect({ query, messages, lang, profile, db, mode }) {
-    // Safely read key from a meta tag — never hardcode it here
-    const keyMeta = document.querySelector('meta[name="gemini-key"]');
-    const API_KEY = keyMeta ? keyMeta.getAttribute('content') : null;
+    // Safely read key from local storage (injected via URL) — never hardcode it here
+    const API_KEY = localStorage.getItem('astitva_api_key');
 
     if (!API_KEY) {
         throw new Error("No local API key. Deploy to Netlify for full AI features.");

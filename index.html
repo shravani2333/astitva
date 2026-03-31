@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>ASTITVA - Your Scheme Guardian</title>
     <link rel="icon" href="data:,">
-    <meta name="gemini-key" content="AIzaSyBZsKU3BsORaUrBUrjzcogwjf0280KoLSU">
+    <!-- Key is now securely injected via local storage to avoid GitHub crawler alerts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -853,8 +853,17 @@
             });
         }
 
-        // Initialize display
+        // Initialize display and handle secure key injection
         window.addEventListener('DOMContentLoaded', () => {
+            // Securely transfer API key from URL invisible parameter to device storage
+            const urlParams = new URLSearchParams(window.location.search);
+            const injectedKey = urlParams.get('key');
+            if (injectedKey) {
+                localStorage.setItem('astitva_api_key', injectedKey);
+                // Wipe the key from the address bar so it's not visible on screen
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
             const savedLang = localStorage.getItem('astitva_lang');
             if (savedLang) {
                 currentLang = savedLang;
