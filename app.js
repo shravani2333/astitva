@@ -165,16 +165,8 @@ function onViewChanged(viewId) {
         const h2 = document.querySelector('#view-3 h2');
         if(h2) h2.innerText = currentLang === 'te' ? `నమస్కారం, ${appState.userName}!` : `नमस्ते, ${appState.userName}!`;
         speak(currentLang === 'te' ? `${appState.userName}, ఈరోజు మీకు ఏ మార్గదర్శకత్వం కావాలి?` : `${appState.userName}, आज आपको क्या मदद चाहिए?`, null, null, currentLang === 'te' ? `${appState.userName}, Ee-roju meku ye sahaayam kaavali?` : `${appState.userName}, aaj aapko kya madad chahiye?`);
-    } else if (viewId === 4 && appState.matchedScheme) {
-        const speech = currentLang === 'te' 
-            ? `నేను మీ కోసం ${appState.matchedScheme.name_te} పథకాన్ని కనుగొన్నాను. ఇది ${appState.matchedScheme.benefit_te} ఇస్తుంది.`
-            : `मुझे आपके लिए ${appState.matchedScheme.name_hi} योजना मिली है। यह ${appState.matchedScheme.benefit_hi} प्रदान करती है।`;
-        
-        const phonetic = currentLang === 'te' 
-            ? `Nenu mee kosam ${appState.matchedScheme.name} pathakanni kanugonnanu.`
-            : `Mujhe aapke liye ${appState.matchedScheme.name} yojana mili hai.`;
-            
-        speak(speech, null, null, phonetic);
+        // View 4 speech is now entirely dictated by Gemini RAG engine in renderRecommendedSchemes. No hardcoded override here.
+        // Wait for renderRecommendedSchemes to trigger speak().
     } else if (viewId === 6) {
         speak(currentLang === 'te' 
             ? "నమస్తే! మేము మీ స్థానిక సహాయకులము. మీకు ఇంకేమైనా సహాయం కావాలంటే దయచేసి మమ్మల్ని సంప్రదించండి." 
@@ -811,8 +803,10 @@ The user's spoken language is: ${uLang}.
 User Profile: Name: ${pName}, Age: ${pAge}, Occupation: ${pOcc}.
 Database of schemes: ${JSON.stringify((db || []).slice(0, 20))}.
 
-TASK: Match their problem against exact schemes. Write a fluent, conversational 2-sentence response explaining EXACTLY what the scheme is and its specific benefits in their spoken language. Return ONLY valid JSON:
-{ "speech": "Empathetic detailed answer in ${uLang} script", "speech_phonetic": "Same detailed answer in Latin script", "scheme_ids": ["ID1"] }`;
+TASK: Match problem against EXACT schemes from DB. Do not invent. Speak strictly in ${uLang}. Order by highest priority.
+Structure speech: 1) Explain top scheme and its exact benefit. 2) Explain other schemes. 3) Ask which one they want to proceed with.
+Return ONLY valid JSON:
+{ "speech": "Empathetic conversational answer in ${uLang} script correctly structured.", "speech_phonetic": "Same structured answer in Latin script", "scheme_ids": ["ID1"] }`;
         contentText = "Query: " + (query || "");
     } else {
         sysInstruction = `You are Disha, a helpful local rural scheme expert. Be extremely empathetic and concise. No markdown.
@@ -828,7 +822,7 @@ TASK: Answer the question. Return ONLY valid JSON:
         body: JSON.stringify({
             system_instruction: { parts: [{ text: sysInstruction }] },
             contents: [{ parts: [{ text: contentText }] }],
-            generationConfig: { temperature: 0.3, responseMimeType: "application/json" }
+            generationConfig: { temperature: 0.1, responseMimeType: "application/json" }
         })
     });
 

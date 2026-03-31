@@ -28,9 +28,13 @@ User Profile: Name: ${pName}, Age: ${pAge}, Occupation: ${pOcc}.
 Database of schemes: ${JSON.stringify(db || [])}.
 
 TASK:
-1. Match their problem against exact schemes.
-2. Select the best 1-2 matching scheme IDs.
-3. Write a fluent, conversational 2-sentence response explaining EXACTLY what the recommended scheme is and what specific benefits it provides (e.g., "I found the Mahalakshmi scheme for you. It provides 2500 rupees every month..."). Speak naturally as if you are talking directly to them.
+1. Match their problem against EXACT schemes from the database ONLY. Do NOT invent schemes.
+2. Select the best 1-2 matching scheme IDs, ordered by highest priority first.
+3. Structure your speech as follows:
+   - First, present the highest priority scheme: mention it is the top scheme for them and explain its exact benefit from the database.
+   - Second, briefly describe any other matching schemes.
+   - Finally, end by asking which scheme they want to proceed with (e.g. 'వీటిలో మీకు ఏ పథకం గురించి కావాలి?' in Telugu or 'आपको इनमें से कौन सी योजना चाहिए?' in Hindi).
+4. Speak strictly in the requested language (${uLang}).
 
 CRITICAL: YOU MUST RETURN RAW JSON ONLY.
 Required Schema:
@@ -64,7 +68,7 @@ Required Schema:
                 system_instruction: { parts: [{ text: sysInstruction }] },
                 contents: [{ parts: [{ text: contentText }] }],
                 generationConfig: {
-                    temperature: 0.3,
+                    temperature: 0.1,
                     responseMimeType: jsonResponseSchema
                 }
             })
