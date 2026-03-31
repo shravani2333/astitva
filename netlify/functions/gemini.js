@@ -83,17 +83,24 @@ Required Schema:
         const rawReply = data.candidates?.[0]?.content?.parts?.[0]?.text;
         if(!rawReply) throw new Error("Empty gemini response");
         
-        // Clean any markdown formatting Gemini might have wrapped the JSON in
-        let cleanReply = rawReply.replace(/```json/gi, '').replace(/```/g, '').trim();
+        const startIndex = rawReply.indexOf('{');
+        const endIndex = rawReply.lastIndexOf('}');
+        
+        if (startIndex === -1 || endIndex === -1) {
+            throw new Error("No valid JSON object found in AI response");
+        }
+        
+        // Isolate exactly the JSON part, dropping any markdown blocks or conversational text
+        let jsonStr = rawReply.substring(startIndex, endIndex + 1);
         
         let parsedReply;
         try {
-            parsedReply = JSON.parse(cleanReply);
+            parsedReply = JSON.parse(jsonStr);
         } catch(parseErr) {
-            // LLMs often mistakenly inject literal unescaped newlines inside JSON strings when asked to format text.
-            // Sanitize raw control characters to valid escaped characters.
-            let sanitized = cleanReply.replace(/(?<!\\)\n/g, '\\n').replace(/\r/g, '');
-            parsedReply = JSON.parse(sanitized);
+            // If the AI accidentally left literal unescaped newlines inside the JSON strings,
+            // we safely replace ALL newlines with spaces. This preserves valid JSON structure.
+            let safeJsonStr = jsonStr.replace(/\n/g, ' ').replace(/\r/g, '');
+            parsedReply = JSON.parse(safeJsonStr);
         }
         
         // Return exactly what Gemini formatted as JSON natively
