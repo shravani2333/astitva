@@ -621,6 +621,22 @@ function startGeminiVoiceSearch() {
         if(status) status.innerText = currentLang === 'te' ? "వెతుకుతున్నాను..." : "खोज रहा हूँ...";
         
         try {
+            // FAST PATH: If local API key exists, bypass dead Netlify backend completely
+            const keyMeta = document.querySelector('meta[name="gemini-key"]');
+            if (keyMeta && keyMeta.getAttribute('content')) {
+                const data = await callGeminiDirect({
+                    query: transcript,
+                    lang: currentLang,
+                    profile: { name: appState.userName, age: appState.userAge, occ: appState.userOcc },
+                    db: astitva_db,
+                    mode: 'rag'
+                });
+                
+                if(status) status.innerText = "Tap to speak your needs";
+                renderRecommendedSchemes(data.scheme_ids || [], data.speech, data.speech_phonetic);
+                return;
+            }
+
             const res = await fetch('/.netlify/functions/gemini', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -749,6 +765,18 @@ async function handleExpertChat(query) {
     const reqCtx = appState.matchedScheme ? `User is asking about ${appState.matchedScheme.name}. User query: ${query}` : query;
     
     try {
+        // FAST PATH: If local API key exists, bypass dead Netlify backend
+        const keyMeta = document.querySelector('meta[name="gemini-key"]');
+        if (keyMeta && keyMeta.getAttribute('content')) {
+            const data = await callGeminiDirect({
+                messages: reqCtx,
+                lang: currentLang,
+                mode: 'chat'
+            });
+            appendBotReply(chatContainer, data.reply, data.reply_phonetic || "");
+            return;
+        }
+
         // Send to Netlify Function
         const res = await fetch('/.netlify/functions/gemini', {
             method: 'POST',
