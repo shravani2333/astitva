@@ -168,15 +168,7 @@ function onViewChanged(viewId) {
         if(h2) h2.innerText = currentLang === 'te' ? `నమస్కారం, ${appState.userName}!` : `नमस्ते, ${appState.userName}!`;
         speak(currentLang === 'te' ? `${appState.userName}, ఈరోజు మీకు ఏ మార్గదర్శకత్వం కావాలి?` : `${appState.userName}, आज आपको क्या मदद चाहिए?`, null, null, currentLang === 'te' ? `${appState.userName}, Ee-roju meku ye sahaayam kaavali?` : `${appState.userName}, aaj aapko kya madad chahiye?`);
     } else if (viewId === 4 && appState.matchedScheme) {
-        const speech = currentLang === 'te' 
-            ? `నేను మీ కోసం ${appState.matchedScheme.name_te} పథకాన్ని కనుగొన్నాను. ఇది ${appState.matchedScheme.benefit_te} ఇస్తుంది.`
-            : `मुझे आपके लिए ${appState.matchedScheme.name_hi} योजना मिली है। यह ${appState.matchedScheme.benefit_hi} प्रदान करती है।`;
-        
-        const phonetic = currentLang === 'te' 
-            ? `Nenu mee kosam ${appState.matchedScheme.name} pathakanni kanugonnanu.`
-            : `Mujhe aapke liye ${appState.matchedScheme.name} yojana mili hai.`;
-            
-        speak(speech, null, null, phonetic);
+        // Voice is exclusively driven by the intelligent Gemini RAG response in renderRecommendedSchemes
     } else if (viewId === 6) {
         speak(currentLang === 'te' 
             ? "నమస్తే! మేము మీ స్థానిక సహాయకులము. మీకు ఇంకేమైనా సహాయం కావాలంటే దయచేసి మమ్మల్ని సంప్రదించండి." 
@@ -629,16 +621,24 @@ function startGeminiVoiceSearch() {
         if(status) status.innerText = currentLang === 'te' ? "వెతుకుతున్నాను..." : "खोज रहा हूँ...";
         
         try {
-            // FAST PATH: ALWAYS bypass dead Netlify backend completely
-            const data = await callGeminiDirect({
-                query: transcript,
-                lang: currentLang,
-                profile: { name: appState.userName, age: appState.userAge, occ: appState.userOcc },
-                db: astitva_db,
-                mode: 'rag'
+            const res = await fetch('/.netlify/functions/gemini', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    query: transcript,
+                    lang: currentLang,
+                    profile: { name: appState.userName, age: appState.userAge, occ: appState.userOcc },
+                    db: astitva_db
+                })
             });
+
+            if(!res.ok) throw new Error("API failed");
+            const data = await res.json();
+            
             if(status) status.innerText = "Tap to speak your needs";
+            
             renderRecommendedSchemes(data.scheme_ids || [], data.speech, data.speech_phonetic);
+            
         } catch(e) {
             console.error("Direct API Fallback Failed - RAG:", e);
             if(status) status.innerText = "Tap to speak your needs";
@@ -798,8 +798,10 @@ The user's spoken language is: ${uLang}.
 User Profile: Name: ${pName}, Age: ${pAge}, Occupation: ${pOcc}.
 Database of schemes: ${JSON.stringify((db || []).slice(0, 20))}.
 
-TASK: Match their problem against exact schemes. Write a fluent, conversational 2-sentence response explaining EXACTLY what the scheme is and its specific benefits in their spoken language. Return ONLY valid JSON:
-{ "speech": "Empathetic detailed answer in ${uLang} script", "speech_phonetic": "Same detailed answer in Latin script", "scheme_ids": ["ID1"] }`;
+TASK: Match problem against EXACT schemes from DB. Do not invent. Speak strictly in ${uLang}. Order by highest priority.
+Structure speech: 1) Give a detailed explanation of the top scheme and its exact benefits. 2) Provide descriptions of other matching schemes if applicable. 3) Ask which specific scheme they want help with.
+Return ONLY valid JSON:
+{ "speech": "Highly detailed, empathetic conversational answer in ${uLang} script.", "speech_phonetic": "Same detailed structured answer in Latin script", "scheme_ids": ["ID1"] }`;
         contentText = "Query: " + (query || "");
     } else {
         sysInstruction = `You are Disha, a helpful local rural scheme expert. Be extremely empathetic and concise. No markdown.
