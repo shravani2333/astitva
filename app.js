@@ -63,6 +63,7 @@ let _activeRecognition = null;
 let _activeSpeakTimer = null;
 let _pendingTimers = []; // Track all pending setTimeout IDs for cleanup
 let _speechId = 0; // Prevent canceled speech from triggering its callback
+window._activeUtterances = []; // FIX: Prevent Android GC from destroying utterances mid-speech
 
 function cleanSlate() {
     _speechId++; // Discard any pending speech callbacks
@@ -73,6 +74,7 @@ function cleanSlate() {
         try { _activeRecognition.abort(); } catch(e) {}
         _activeRecognition = null;
     }
+    window._activeUtterances = []; // Free memory of past utterances
     // Reset listening guard
     _isListening = false;
     // Clear any pending failsafe timers
@@ -912,13 +914,13 @@ function speak(textNative, onEndCallback, forceLang = null, textPhonetic = null)
         }
 
         // Android Chrome cuts off speech strictly at 15 seconds.
-        // FIX: Split long speech into sentence chunks and queue them sequentially.
-        const chunks = finalSpeakingText.match(/[^.!?।]+[.!?।]*/g) || [finalSpeakingText];
+        // FIX: Split long speech into sentence chunks and queue them sequentially, including commas and newlines.
+        const chunks = finalSpeakingText.match(/[^.,!?।\n]+[.,!?।\n]*/g) || [finalSpeakingText];
         let currentChunkIndex = 0;
 
         // FIX 1B: Failsafe timeout — if browser drops the onend event, proceed anyway
         // Increased multiplier significantly because Telugu/Hindi phonetics take longer
-        const totalTimeoutMs = (finalSpeakingText.length * 160) + 5000;
+        const totalTimeoutMs = (finalSpeakingText.length * 200) + 10000;
         
         let callbackFired = false;
         const safeCallback = () => {
@@ -964,6 +966,8 @@ function speak(textNative, onEndCallback, forceLang = null, textPhonetic = null)
                 speakNextChunk();
             };
 
+            // FIX: Pin utterance to window so Android Garbage Collector doesn't delete it before onend fires
+            window._activeUtterances.push(utter);
             window.speechSynthesis.speak(utter);
         };
 
