@@ -864,11 +864,20 @@ TASK: Answer the question. Return ONLY valid JSON:
     if (raw.error) throw new Error(raw.error.message);
     let text = raw.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!text) throw new Error("Empty Gemini response");
+    // Clean markdown blocks and extract JSON substring
+    let jsonStr = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+    const startIndex = jsonStr.indexOf('{');
+    const endIndex = jsonStr.lastIndexOf('}');
+    if (startIndex !== -1 && endIndex !== -1) {
+        jsonStr = jsonStr.substring(startIndex, endIndex + 1);
+    }
     
-    // Clean markdown blocks (```json ... ```)
-    text = text.replace(/```json/gi, '').replace(/```/g, '').trim();
-    
-    return JSON.parse(text);
+    try {
+        return JSON.parse(jsonStr);
+    } catch(e) {
+        // Fallback for unescaped literal newlines created by LLMs
+        return JSON.parse(jsonStr.replace(/\n/g, ' ').replace(/\r/g, ''));
+    }
 }
 
 function appendBotReply(container, replyText, replyPhonetic) {
